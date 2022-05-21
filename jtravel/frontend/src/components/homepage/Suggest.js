@@ -8,28 +8,29 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
 import ablum from '../../assets/images/album.jpg'
 
-const Container = styled(Box) ({
-  display: 'flex', 
-  position: 'sticky', 
-  alignSelf: 'flex-start', 
-  flexDirection: 'column', 
+const StyledBox = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  position: 'sticky',
+  alignSelf: 'flex-start',
+  flexDirection: 'column',
   alignItems: 'flex-end',
-  top: 0, 
-})
+  top: 0,
+  [theme.breakpoints.down('lg')]: {
+    display: 'none',
+  },
+}));
 
 function Suggest() {
 
   const theme = useTheme();
 
   return (
-    <Container paddingTop={10} flex={2}>
+    <StyledBox paddingTop={10} flex={2}>
       <Box sx={{ mt: 1, mr: 2 }}>
         {/* Gallery */}
-        <Divider textAlign='left' sx={{ mb: 1, color: '#37474f' }}>
-          <Typography variant='h6' sx={{ color: '#37474f' }}>
-            Featured Gallery
-          </Typography>
-        </Divider>
+        <Typography variant='h6' sx={{ mb: 1 }}>
+          Featured Gallery
+        </Typography>
         <ImageList sx={{ width: 400, height: 500, borderRadius: '16px' }}>
           {Gallery.map((item, index) => {
             return (
@@ -54,11 +55,9 @@ function Suggest() {
           })}
         </ImageList>
         {/* J-Pop Music */}
-        <Divider textAlign='left' sx={{ mt: 3, mb: 1, color: '#37474f' }}>
-          <Typography variant='h6' sx={{ color: '#37474f' }}>
-            Hot J-Pop Music
-          </Typography>
-        </Divider>
+        <Typography variant='h6' sx={{ mt: 3, mb: 1 }}>
+          Hot J-Pop Music
+        </Typography>
         <Card sx={{ display: 'flex', borderRadius: '16px', width: 400 }}>
           <Box sx={{ display: 'flex', flexDirection: 'column' }}>
             <CardContent sx={{ flex: '1 0 auto' }}>
@@ -84,7 +83,7 @@ function Suggest() {
           <CardMedia component="img" image={ablum} sx={{ width: 151, ml: 'auto' }} alt="Live from space album cover" />
         </Card>
       </Box>
-    </Container>
+    </StyledBox>
   )
 }
 

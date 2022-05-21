@@ -3,39 +3,41 @@ import { Box, Typography, Avatar, AvatarGroup, Divider, List, ListItem, ListItem
 import { styled } from '@mui/material/styles';
 import { Avatars, Chats } from './SocialData'
 
-const Container = styled(Box)({
+const StyledBox = styled(Box)(({ theme }) => ({
   display: 'flex',
   position: 'sticky',
   alignSelf: 'flex-start',
   flexDirection: 'column',
   alignItems: 'flex-start',
-  top: 0
-})
+  top: 0,
+  [theme.breakpoints.down('lg')]: {
+    display: 'none',
+  },
+}));
 
 function Social() {
+
   return (
-    <Container paddingTop={10} flex={2}>
+    <StyledBox paddingTop={10} flex={2}>
       <Box sx={{ mt: 1, ml: 2 }}>
         {/* Active Users */}
-        <Divider textAlign='left' sx={{ mb: 1, color: '#37474f' }}>
-          <Typography variant='h6' sx={{ color: '#37474f' }}>
-            Active User
-          </Typography>
-        </Divider>
+        <Typography variant='h6' sx={{ mb: 1 }}>
+          Active User
+        </Typography>
         <AvatarGroup max={9} total={28}
-          sx={{ mr: 2 }}>
+          sx={{ mr: 2.5 }}>
           {Avatars.map((item, index) => {
             return (
               <Avatar key={index}>{item.avatar}</Avatar>
             )
           })}
         </AvatarGroup>
-        {/* Chat */}
-        <Divider textAlign='left' sx={{ mt: 3, color: '#37474f' }}>
-          <Typography variant='h6' sx={{ color: '#37474f' }}>
-            Public Chatroom
-          </Typography>
-        </Divider>
+      </Box>
+      {/* Chat */}
+      <Box>
+        <Typography variant='h6' sx={{ mt: 4 }}>
+          Public Chatroom
+        </Typography>
         {Chats.map((item, index) => {
           return (
             <List key={index} sx={{ height: 50, width: '100%', maxWidth: 450 }}>
@@ -47,10 +49,11 @@ function Social() {
               </ListItem>
               <Divider variant='middle' sx={{ width: 320 }} />
             </List>
+
           )
         })}
       </Box>
-    </Container>
+    </StyledBox>
   )
 }
 

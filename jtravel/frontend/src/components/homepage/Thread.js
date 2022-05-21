@@ -72,19 +72,20 @@ function Thread() {
   };
 
   return (
-    <Box paddingTop={8} flex={2} sx={{ display: 'flex', flexDirection: 'column' }}>
+    <Box paddingTop={8} flex={2} sx={{ display: 'flex', flexDirection: 'column-reverse' }}>
       {/* Thread */}
       {thread.map((item, index) => {
         return ( 
           <Card key={index} sx={{ margin: 3, borderRadius: '16px' }}>
             <CardHeader
+              titleTypographyProps={{ fontSize: 18 }}
               avatar={<Avatar sx={{ backgroundColor: red[500] }} aria-label='family'>A</Avatar>}
               action={<IconButton aria-label='settings'><MoreVertIcon /></IconButton>}
-              title={item.author}
+              title={item.username}
               subheader={item.created} />
             <CardMedia component='img' image={item.image} height='auto' />
             <CardContent>
-              <Typography variant='body2' color='text.secondary'>
+              <Typography variant='body2'>
                 {item.content}
               </Typography>
             </CardContent>

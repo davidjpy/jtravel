@@ -1,7 +1,32 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { styled, useTheme } from '@mui/material/styles';
 import MuiAppBar from '@mui/material/AppBar';
-import { Popover, MenuList, MenuItem, Modal, ListItemText, ListItemButton, IconButton, Divider, Typography, List, Toolbar, Drawer, Box, Badge, Backdrop, Fade, alpha, TextField, Button, Snackbar, Alert } from '@mui/material'
+import {
+  FormControlLabel,
+  Switch,
+  Menu,
+  Avatar,
+  Tooltip,
+  MenuItem,
+  Modal,
+  ListItemText,
+  ListItemButton,
+  IconButton,
+  Divider,
+  Typography,
+  List,
+  Toolbar,
+  Drawer,
+  Box,
+  Badge,
+  Backdrop,
+  Fade,
+  alpha,
+  TextField,
+  Button,
+  Snackbar,
+  Alert
+} from '@mui/material'
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
@@ -10,13 +35,18 @@ import LoginRoundedIcon from '@mui/icons-material/LoginRounded';
 import VpnKeyRoundedIcon from '@mui/icons-material/VpnKeyRounded';
 import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import Settings from '@mui/icons-material/Settings';
+import Logout from '@mui/icons-material/Logout';
+import AnnouncementIcon from '@mui/icons-material/Announcement';
+import FavoriteRoundedIcon from '@mui/icons-material/FavoriteRounded';
+import BookmarkRoundedIcon from '@mui/icons-material/BookmarkRounded';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 
 import { WebIcon, UserIcon, FunctionIcon } from './SidebarButtons';
 import useValidation from '../../hooks/useValidation';
 import useAuth from '../../hooks/useAuth';
 import axiosInstance from '../../utils/Axios';
+import { bgcolor } from '@mui/system';
 
 const drawerWidth = 180;
 
@@ -92,7 +122,52 @@ const SignUpBox = styled('div')(({ theme }) => ({
   padding: theme.spacing(7)
 }));
 
-export default function Sidebar() {
+const MaterialUISwitch = styled(Switch)(({ theme }) => ({
+  width: 62,
+  height: 34,
+  '& .MuiSwitch-switchBase': {
+    padding: 0,
+    transform: 'translateX(6px)',
+    '&.Mui-checked': {
+      color: '#fff',
+      transform: 'translateX(22px)',
+      '& .MuiSwitch-thumb:before': {
+        backgroundImage: `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 20 20"><path fill="${encodeURIComponent(
+          '#fff',
+        )}" d="M4.2 2.5l-.7 1.8-1.8.7 1.8.7.7 1.8.6-1.8L6.7 5l-1.9-.7-.6-1.8zm15 8.3a6.7 6.7 0 11-6.6-6.6 5.8 5.8 0 006.6 6.6z"/></svg>')`,
+      },
+      '& + .MuiSwitch-track': {
+        opacity: 1,
+        backgroundColor: theme.palette.mode === 'dark' ? '#8796A5' : '#aab4be',
+      },
+    },
+  },
+  '& .MuiSwitch-thumb': {
+    backgroundColor: theme.palette.mode === 'dark' ? '#003892' : '#001e3c',
+    width: 32,
+    height: 32,
+    '&:before': {
+      content: "''",
+      position: 'absolute',
+      width: '100%',
+      height: '100%',
+      left: 0,
+      top: 0,
+      backgroundRepeat: 'no-repeat',
+      backgroundPosition: 'center',
+      backgroundImage: `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 20 20"><path fill="${encodeURIComponent(
+        '#fff',
+      )}" d="M9.305 1.667V3.75h1.389V1.667h-1.39zm-4.707 1.95l-.982.982L5.09 6.072l.982-.982-1.473-1.473zm10.802 0L13.927 5.09l.982.982 1.473-1.473-.982-.982zM10 5.139a4.872 4.872 0 00-4.862 4.86A4.872 4.872 0 0010 14.862 4.872 4.872 0 0014.86 10 4.872 4.872 0 0010 5.139zm0 1.389A3.462 3.462 0 0113.471 10a3.462 3.462 0 01-3.473 3.472A3.462 3.462 0 016.527 10 3.462 3.462 0 0110 6.528zM1.665 9.305v1.39h2.083v-1.39H1.666zm14.583 0v1.39h2.084v-1.39h-2.084zM5.09 13.928L3.616 15.4l.982.982 1.473-1.473-.982-.982zm9.82 0l-.982.982 1.473 1.473.982-.982-1.473-1.473zM9.305 16.25v2.083h1.389V16.25h-1.39z"/></svg>')`,
+    },
+  },
+  '& .MuiSwitch-track': {
+    opacity: 1,
+    backgroundColor: theme.palette.mode === 'dark' ? '#8796A5' : '#aab4be',
+    borderRadius: 20 / 2,
+  },
+}));
+
+export default function Sidebar({ appTheme, setAppTheme }) {
 
   const theme = useTheme();
   const navigate = useNavigate();
@@ -120,7 +195,6 @@ export default function Sidebar() {
   const [anchorEl, setAnchorEl] = useState(null);
 
   const openAccountMenu = Boolean(anchorEl);
-  const accountId = openAccountMenu ? 'simple-popover' : undefined;
   const { emailError, usernameError, passwordError, matchError, isError }
     = useValidation(email, username, password1, password2);
   const { auth, setAuth, requireLoginAlert, setRequireLoginAlert } = useAuth();
@@ -235,11 +309,11 @@ export default function Sidebar() {
       axiosInstance.defaults.headers['Authorization'] = null;
       setAuth('');
     } catch (err) {
-      console.log(err)
+      console.log(err);
     }
   };
 
-  const toggleAccountMenu = () => {
+  const toggleAccountMenu = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
@@ -334,60 +408,112 @@ export default function Sidebar() {
             </Typography>
             {!auth?.accessToken
               ?
-              <Button color='primary' variant='contained' onClick={toggleLoginWindow} startIcon={<VpnKeyRoundedIcon />}
-                sx={{ textTransform: 'none', fontSize: 14 }}>
-                Login
-              </Button>
+              <>
+                <Button color='primary' variant='contained' onClick={toggleLoginWindow} startIcon={<VpnKeyRoundedIcon />}
+                  sx={{ textTransform: 'none', fontSize: 14 }}>
+                  Login
+                </Button>
+              </>
               :
               <>
                 <IconButton size='large' color='inherit' onClick={logger}>
                   <Badge badgeContent={11} color='error'>
-                    <VpnKeyRoundedIcon />
-                  </Badge>
-                </IconButton>
-                <IconButton size='large' color='inherit' onClick={handleLogout}>
-                  <Badge badgeContent={69} color='error'>
-                    <VpnKeyRoundedIcon />
+                    <VpnKeyRoundedIcon fontSize='inherit' />
                   </Badge>
                 </IconButton>
                 <IconButton size='large' aria-label='mail' color='inherit'>
                   <Badge badgeContent={20} color='error'>
-                    <MailIcon />
+                    <MailIcon fontSize='inherit' />
                   </Badge>
                 </IconButton>
                 <IconButton size='large' aria-label='notification' color='inherit'>
                   <Badge badgeContent={32} color='error'>
-                    <NotificationsIcon />
+                    <NotificationsIcon fontSize='inherit' />
                   </Badge>
                 </IconButton>
                 {/* Account Menu */}
-                <IconButton size='large' aria-label='account' color='inherit' aria-describedby={accountId}
-                  onClick={toggleAccountMenu} sx={{ mr: 1 }}>
-                  <Badge badgeContent={15} color='error'>
-                    <AccountCircleIcon />
-                  </Badge>
-                </IconButton>
-                <Popover
-                  id={accountId}
+                <Tooltip title='Account Settings'>
+                  <IconButton onClick={toggleAccountMenu} size="small"
+                    aria-controls={openAccountMenu ? 'account-menu' : undefined}
+                    aria-haspopup="true"
+                    aria-expanded={openAccountMenu ? 'true' : undefined}
+                    sx={{ ml: 0.5, mr: 2 }}>
+                    <Avatar sx={{ width: 28, height: 28 }}>M</Avatar>
+                  </IconButton>
+                </Tooltip>
+                <Menu
+                  anchorEl={anchorEl}
+                  id='account-menu'
                   open={openAccountMenu}
                   onClose={closeAccountMenu}
-                  anchorEl={anchorEl}
-                  anchorReference="anchorPosition"
-                  anchorPosition={{ top: 65, left: 2000 }}
-                  anchorOrigin={{
-                    vertical: 'top',
-                    horizontal: 'left',
-                  }}
-                  transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'left',
-                  }}
-                >
-                  <MenuList id="account-menu" aria-labelledby="menu-button">
-                    <MenuItem>Profile</MenuItem>
-                    <MenuItem onClick={handleLogout}>Logout</MenuItem>
-                  </MenuList>
-                </Popover>
+                  transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+                  anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+                  PaperProps={{
+                    elevation: 0,
+                    sx: {
+                      overflow: 'visible',
+                      filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+                      mt: 1.5,
+                      '& .MuiAvatar-root': {
+                        width: 32, height: 32, ml: -0.5, mr: 2,
+                      },
+                      '&:before': {
+                        content: '""', display: 'block', position: 'absolute',
+                        top: 0, right: 14, width: 10, height: 10,
+                        bgcolor: 'background.paper', transform: 'translateY(-50%) rotate(45deg)',
+                        zIndex: 0,
+                      },
+                    },
+                  }}>
+                  <MenuItem onClick={() => {closeAccountMenu(); navigate('profile/')}}>
+                    <Avatar /> Profile
+                  </MenuItem>
+                  <Divider />
+                  <MenuItem onClick={closeAccountMenu}>
+                    <ListItemIcon sx={{ mr: 1.5 }}>
+                      <Badge color='error' badgeContent={125}>
+                        <FavoriteRoundedIcon />
+                      </Badge>
+                    </ListItemIcon>
+                    Liked Posts
+                  </MenuItem>
+                  <MenuItem onClick={closeAccountMenu}>
+                    <ListItemIcon sx={{ mr: 1.5 }}>
+                      <Badge color='error' badgeContent={17}>
+                        <BookmarkRoundedIcon />
+                      </Badge>
+                    </ListItemIcon>
+                    Saved
+                  </MenuItem>
+                  <Divider />
+                  <MenuItem onClick={closeAccountMenu}>
+                    <ListItemIcon sx={{ mr: 1.5 }}>
+                      <Settings />
+                    </ListItemIcon>
+                    Settings
+                  </MenuItem>
+                  <MenuItem onClick={closeAccountMenu}>
+                    <ListItemIcon sx={{ mr: 1.5 }}>
+                      <AnnouncementIcon />
+                    </ListItemIcon>
+                    Report
+                  </MenuItem>
+                  <Divider />
+                  <MenuItem>
+                    <FormControlLabel
+                      control={<MaterialUISwitch 
+                      onChange={() => setAppTheme(appTheme === 'light' ? 'dark' : 'light')}
+                      checked={appTheme === 'light' ? false : true} />}
+                      label={appTheme === 'light' ? 'Light Theme' : 'Dark Theme'} />
+                  </MenuItem>
+                  <Divider />
+                  <MenuItem onClick={() => {handleLogout(); closeAccountMenu();}}>
+                    <ListItemIcon sx={{ mr: 1.5 }}>
+                      <Logout />
+                    </ListItemIcon>
+                    Logout
+                  </MenuItem>
+                </Menu>
               </>
             }
           </Toolbar>

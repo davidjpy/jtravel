@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 const useAccountReg = (email, username, password1, password2) => {
   const [emailError, setEmailError] = useState('')

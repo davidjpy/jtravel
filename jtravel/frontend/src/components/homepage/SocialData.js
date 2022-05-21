@@ -11,31 +11,31 @@ export const Chats = [
     alt: 'AzCean(大佬)',
     avatar: album,
     user: 'AzCean',
-    text: "我操你媽逼"
+    text: "Hello? Any regulator in the chat?"
   },
   {
     alt: 'Kclo',
     avatar: kclo,
     user: 'Kclo',
-    text: "對唔住大佬"
+    text: "QAQ"
   },
   {
     alt: 'Jacky',
     avatar: jacky,
     user: 'Jacky',
-    text: "對唔住大佬"
+    text: "QAQ"
   },
   {
     alt: 'Chu',
     avatar: chu,
     user: 'Chu',
-    text: "對唔住大佬"
+    text: "QAQ"
   },
   {
     alt: 'gfdhd',
     avatar: gfdhd,
     user: 'gfdhd',
-    text: "對唔住大佬"
+    text: "QAQ"
   },
 ]
 
