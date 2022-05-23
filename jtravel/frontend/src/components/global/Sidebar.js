@@ -1,32 +1,30 @@
 import React, { useState } from 'react';
 import { styled, useTheme } from '@mui/material/styles';
 import MuiAppBar from '@mui/material/AppBar';
-import {
-  FormControlLabel,
-  Switch,
-  Menu,
-  Avatar,
-  Tooltip,
-  MenuItem,
-  Modal,
-  ListItemText,
-  ListItemButton,
-  IconButton,
-  Divider,
-  Typography,
-  List,
-  Toolbar,
-  Drawer,
-  Box,
-  Badge,
-  Backdrop,
-  Fade,
-  alpha,
-  TextField,
-  Button,
-  Snackbar,
-  Alert
-} from '@mui/material'
+import { FormControlLabel,
+         Switch,
+         Menu,
+         Avatar,
+         Tooltip,
+         MenuItem,
+         Modal,
+         ListItemText,
+         ListItemButton,
+         IconButton,
+         Divider,
+         Typography,
+         List,
+         Toolbar,
+         Drawer,
+         Box,
+         Badge,
+         Backdrop,
+         Fade,
+         alpha,
+         TextField,
+         Button,
+         Snackbar,
+         Alert } from '@mui/material';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
@@ -46,7 +44,6 @@ import { WebIcon, UserIcon, FunctionIcon } from './SidebarButtons';
 import useValidation from '../../hooks/useValidation';
 import useAuth from '../../hooks/useAuth';
 import axiosInstance from '../../utils/Axios';
-import { bgcolor } from '@mui/system';
 
 const drawerWidth = 180;
 
@@ -286,6 +283,7 @@ export default function Sidebar({ appTheme, setAppTheme }) {
         .then((resp) => {
           localStorage.setItem('access_token', resp.data.access);
           localStorage.setItem('refresh_token', resp.data.refresh);
+          localStorage.setItem('user_id', resp.data.user.id);
           const accessToken = resp?.data?.access;
           const refreshToken = resp?.data?.refresh;
           const user = resp?.data?.user;
@@ -305,7 +303,7 @@ export default function Sidebar({ appTheme, setAppTheme }) {
       });
       localStorage.removeItem('access_token');
       localStorage.removeItem('refresh_token');
-      localStorage.removeItem('user');
+      localStorage.removeItem('user_id')
       axiosInstance.defaults.headers['Authorization'] = null;
       setAuth('');
     } catch (err) {

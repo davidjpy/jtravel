@@ -15,8 +15,11 @@ class UserSerializer(serializers.ModelSerializer):
             'email',
             'username',
             'name',
+            'profile_image',
+            'about',
             'start_date',
             'is_active',
+            'last_login'
         )
         read_only_field = ('start_date',)
 

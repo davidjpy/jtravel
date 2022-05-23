@@ -26,7 +26,6 @@ class RegisterViewSet(viewsets.ModelViewSet, TokenObtainPairView):
             return Response(serializer.error, status=status.HTTP_400_BAD_REQUEST)
 
 
-# Login API
 class LoginViewSet(viewsets.ModelViewSet, TokenObtainPairView):
     serializer_class = LoginSerialier
     permission_classes = (AllowAny,)
@@ -43,7 +42,6 @@ class LoginViewSet(viewsets.ModelViewSet, TokenObtainPairView):
         
         return Response(serializer.validated_data, status=status.HTTP_200_OK)
     
-# Get Refresh Token
 class RefreshViewSet(viewsets.ViewSet, TokenRefreshView):
     permission_classes = (AllowAny,)
     http_method_names = ['post']
@@ -59,28 +57,11 @@ class RefreshViewSet(viewsets.ViewSet, TokenRefreshView):
 
         return Response(serializer.validated_data, status=status.HTTP_200_OK)        
 
-# Get User API
 class UserViewSet(viewsets.ModelViewSet):
-    serializer_class = UserSerializer
+    queryset = Account.objects.all()
+    serializer_class = UserSerializer 
     permission_classes = (IsAuthenticated,)
-    http_method_names = ['get']
-    filter_backends = [filters.OrderingFilter]
-    ordering_fields = ['start_date']
-    ordering = ['-start_date']
     
-    def get_queryset(self):
-        if self.request.user.is_superuser:
-            
-            return Account.objects.all()
-
-    def get_object(self):
-        lookup_field_value = self.kwargs[self.lookup_field]
-
-        obj = Account.objects.get(lookup_field_value)
-        self.check_object_permissions(self.request, obj)
-
-        return obj
-
 class BlacklistTokenView(viewsets.ModelViewSet):
     permission_classes = (AllowAny,)
     authentication_classes = ()

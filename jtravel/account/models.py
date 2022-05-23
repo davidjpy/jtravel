@@ -1,3 +1,6 @@
+from distutils.command.upload import upload
+from email.policy import default
+from operator import truediv
 from django.contrib.auth.models import (
     AbstractBaseUser,
     BaseUserManager,
@@ -6,6 +9,8 @@ from django.contrib.auth.models import (
 from django.db import models
 from django.utils import timezone
 
+def profile_image_path(instance, filename):
+    return 'images/profile/{0}'.format(filename)
 
 class AccountManager(BaseUserManager):
     
@@ -53,6 +58,8 @@ class Account(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(max_length=255, unique=True)
     username = models.CharField(max_length=255, unique=True)
     name = models.CharField(max_length=255, default="")
+    profile_image = models.ImageField(max_length=255, upload_to=profile_image_path, default='images/default.jpg', blank=True)
+    about = models.TextField(max_length=255, default='Write something about yourself...', blank=True)
     start_date = models.DateTimeField(default=timezone.now)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)

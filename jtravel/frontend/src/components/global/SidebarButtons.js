@@ -7,9 +7,6 @@ import RestorePageRoundedIcon from '@mui/icons-material/RestorePageRounded';
 import FavoriteRoundedIcon from '@mui/icons-material/FavoriteRounded';
 import LibraryAddRoundedIcon from '@mui/icons-material/LibraryAddRounded';
 import PlagiarismRoundedIcon from '@mui/icons-material/PlagiarismRounded';
-import MailIcon from '@mui/icons-material/Mail';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 export const WebIcon = [
   {
