@@ -34,23 +34,23 @@ class RegisterSerializer(UserSerializer):
     class Meta:
         model = Account
         fields = [
-            'id',
             'email',
             'username',
             'password',
             'name',
-            'start_date',
-            'is_active',
         ]
-
+        extra_kwargs = {'password': {'wirte_only': True}}
+        
     def create(self, validated_data):
-        try:
-            user = Account.objects.get(email=validated_data['email'])
+        password = validated_data.pop('password', None)
+        instance = self.Meta.model(**validated_data)
+        
+        if password is not None:
+            instance.set_password(password)
             
-        except ObjectDoesNotExist:
-            user = Account.objects.create_user(**validated_data)
-            
-        return user
+        instance.save()
+        
+        return instance
 
 # Login Serializer
 class LoginSerialier(TokenObtainPairSerializer):

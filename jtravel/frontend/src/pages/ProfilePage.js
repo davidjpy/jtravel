@@ -1,21 +1,25 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Button } from '@mui/material';
+import { Box } from '@mui/material';
 
 import Info from '../components/profile/Info';
 import Media from '../components/profile/Media';
 import useGetUser from '../hooks/useGetUser';
 import useAuth from '../hooks/useAuth';
+import useProfileThread from '../hooks/useProfileThread';
 
 function ProfilePage() {
 
   const getUser = useGetUser();
-  const { auth } = useAuth();
+  const getThread = useProfileThread();
+  const { auth, profileThread } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
 
+
   useEffect(() => {
-    const verifyUser = async () => {
+    const verifyContent = async () => {
       try {
         await getUser();
+        await getThread();
       }
       catch (err) {
         console.error(err);
@@ -24,8 +28,9 @@ function ProfilePage() {
         setIsLoading(false);
       };
     };
-    verifyUser();
+    verifyContent();
   }, []);
+
 
   return (
     <>
@@ -35,7 +40,7 @@ function ProfilePage() {
         <Box flex={2} bgcolor={'background.default'} color={'text.primary'}
           sx={{ display: 'flex', flexDirection: 'column' }}>
           <Info auth={auth.user} />
-          <Media auth={auth.user} />
+          <Media profileThread={profileThread.profilethread} />
         </Box>
       )};
     </>

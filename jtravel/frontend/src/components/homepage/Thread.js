@@ -15,7 +15,7 @@ import useAxiosFetch from '../../hooks/useAxiosFetch';
 
 function Thread() {
 
-  const { data } = useAxiosFetch('http://127.0.0.1:8000/api/thread/');
+  const { data } = useAxiosFetch('http://127.0.0.1:8000/api/public/thread/');
 
   useEffect(() => {
     setThread(data);
