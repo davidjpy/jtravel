@@ -64,7 +64,7 @@ const AppBar = styled(MuiAppBar, {
   }),
 }));
 
-const DrawerHeader = styled('div')(({ theme }) => ({
+const DrawerHeader = styled(Box)(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'flex-end',
@@ -85,7 +85,7 @@ const LoginTextField = styled(TextField)({
   }
 });
 
-const LoginBox = styled('div')(({ theme }) => ({
+const LoginBox = styled(Box)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'left',
@@ -102,7 +102,7 @@ const LoginBox = styled('div')(({ theme }) => ({
   padding: theme.spacing(7)
 }));
 
-const SignUpBox = styled('div')(({ theme }) => ({
+const SignUpBox = styled(Box)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'left',
@@ -164,7 +164,7 @@ const MaterialUISwitch = styled(Switch)(({ theme }) => ({
   },
 }));
 
-export default function Sidebar({ appTheme, setAppTheme }) {
+function Sidebar({ appTheme, setAppTheme }) {
 
   const theme = useTheme();
   const navigate = useNavigate();
@@ -326,8 +326,8 @@ export default function Sidebar({ appTheme, setAppTheme }) {
   return (
     <Box>
       {/* Login Form */}
-      <Modal aria-labelledby='Login' aria-describedby='Login Page' open={openLogin} onClose={toggleLoginWindow}
-        closeAfterTransition BackdropComponent={Backdrop} BackdropProps={{ timeout: 500 }} >
+      <Modal aria-labelledby='login' aria-describedby='login page' open={openLogin} onClose={toggleLoginWindow}
+        closeAfterTransition BackdropComponent={Backdrop} BackdropProps={{ timeout: 500 }}>
         <Fade in={openLogin}>
           <LoginBox>
             <Typography variant='h4' color='white'>
@@ -436,7 +436,7 @@ export default function Sidebar({ appTheme, setAppTheme }) {
                     aria-haspopup="true"
                     aria-expanded={openAccountMenu ? 'true' : undefined}
                     sx={{ ml: 0.5, mr: 2 }}>
-                    <Avatar sx={{ width: 28, height: 28 }}>M</Avatar>
+                    <Avatar sx={{ width: 28, height: 28 }} />
                   </IconButton>
                 </Tooltip>
                 <Menu
@@ -603,4 +603,6 @@ export default function Sidebar({ appTheme, setAppTheme }) {
       </Snackbar>
     </Box>
   );
-}
+};
+
+export default Sidebar;

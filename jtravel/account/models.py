@@ -58,7 +58,7 @@ class Account(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(max_length=255, unique=True)
     username = models.CharField(max_length=255, unique=True)
     name = models.CharField(max_length=255, default="")
-    profile_image = models.ImageField(max_length=255, upload_to=profile_image_path, default='images/default.jpg', blank=True)
+    profile_image = models.ImageField(max_length=255, upload_to=profile_image_path, blank=True)
     about = models.TextField(max_length=255, default='Write something about yourself...', blank=True)
     start_date = models.DateTimeField(default=timezone.now)
     is_staff = models.BooleanField(default=False)

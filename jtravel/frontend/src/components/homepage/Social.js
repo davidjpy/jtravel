@@ -19,7 +19,7 @@ function Social() {
 
   return (
     <StyledBox paddingTop={10} flex={2}>
-      <Box sx={{ mt: 1, ml: 2 }}>
+      <Box sx={{ mt: 1 }}>
         {/* Active Users */}
         <Typography variant='h6' sx={{ mb: 1 }}>
           Active User
@@ -32,9 +32,7 @@ function Social() {
             )
           })}
         </AvatarGroup>
-      </Box>
-      {/* Chat */}
-      <Box>
+        {/* Chat */}
         <Typography variant='h6' sx={{ mt: 4 }}>
           Public Chatroom
         </Typography>
@@ -49,7 +47,6 @@ function Social() {
               </ListItem>
               <Divider variant='middle' sx={{ width: 320 }} />
             </List>
-
           )
         })}
       </Box>

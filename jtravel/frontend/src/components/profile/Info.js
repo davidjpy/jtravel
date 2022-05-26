@@ -34,7 +34,7 @@ function Info({ auth }) {
     <StyledBox paddingTop={16} paddingBottom={2}>
       <Box sx={{ display: 'flex', justifyContent: 'start', width: 920 }}>
         <Avatar src={profile_image}
-          sx={{ height: 180, width: 180, ml: 2, mr: 4 }}>Az</Avatar>
+          sx={{ height: 180, width: 180, ml: 2, mr: 4 }} />
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, mr: 2 }}>
           <Typography variant='h6' sx={{ fontSize: 40, width: 250, mb: 1 }}>{username}<IconButton>
             <ManageAccountsRoundedIcon fontSize='large' /></IconButton></Typography>
