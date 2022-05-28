@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   Tooltip,
   Fab,
@@ -10,14 +10,15 @@ import {
   TextField,
   Box,
   Button,
-  Divider,
-  Avatar
+  Avatar,
 } from '@mui/material'
 import { styled } from '@mui/material/styles';
 import EditIcon from '@mui/icons-material/Edit';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import PersonIcon from '@mui/icons-material/Person';
 import EventNoteRoundedIcon from '@mui/icons-material/EventNoteRounded';
+import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
+import FaceRetouchingNaturalRoundedIcon from '@mui/icons-material/FaceRetouchingNaturalRounded';
 
 const StyledTooltip = styled(Tooltip)(({ theme }) => ({
   position: 'fixed',
@@ -46,7 +47,7 @@ const CreateBox = styled(Box)(({ theme }) => ({
   left: '49.5%',
   transform: 'translate(-50%, -50%)',
   width: 450,
-  height: 550,
+  height: 420,
   backgroundColor: alpha('#37474f', 0.90),
   borderRadius: '16px',
   boxShadow: 24,
@@ -61,14 +62,19 @@ const LoginTextField = styled(TextField)({
     '& fieldset': {
       borderColor: '#263238',
     },
+    '&:hover fieldset': {
+      borderColor: '#2979ff',
+    },
     input: { color: 'white' },
     backgroundColor: '#263238'
   }
 });
 
-function Create() {
+
+function Create({ auth }) {
 
   const [openCreate, setOpenCreate] = useState(false);
+  const { username, profile_image } = auth;
 
   const toggleCreateWindow = () => {
     setOpenCreate(!openCreate);
@@ -76,36 +82,50 @@ function Create() {
 
   return (
     <>
+      <StyledTooltip title='Create'>
+        <Fab aria-label='create' onClick={toggleCreateWindow}>
+          <EditIcon />
+        </Fab>
+      </StyledTooltip>
       <Modal aria-labelledby='create' aria-describedby='create' open={openCreate} onClose={toggleCreateWindow}
-        closeAfterTransition BackdropComponent={Backdrop} BackdropProps={{ timeout: 500 }}>
+        disableRestoreFocus closeAfterTransition BackdropComponent={Backdrop} BackdropProps={{ timeout: 0 }}>
         <Fade in={openCreate}>
           <CreateBox>
             <Typography variant='h4' color='white'>
               Create a Thread...
             </Typography>
             <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 2 }}>
-              <Avatar sx={{ height: 45, width: 45, ml: 2 }} />
+              <Avatar src={profile_image} sx={{ height: 50, width: 50, ml: 2 }} />
               <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
-                <Typography variant='caption' sx={{ display: 'flex', alignItems: 'center', color: 'white', fontSize: 13 }}>
-                  <PersonIcon fontSize='small' sx={{ mr: 0.5 }} />@davidho</Typography>
-                <Typography variant='caption' sx={{ display: 'flex', alignItems: 'center', color: 'white', fontSize: 13 }}>
-                  <EventNoteRoundedIcon fontSize='small' sx={{ mr: 0.5 }} />@13 May 2022</Typography>
+                <Typography variant='caption' sx={{ display: 'flex', alignItems: 'center', color: 'white', fontSize: 13, color: '#82b1ff' }}>
+                  <PersonIcon fontSize='small' sx={{ mr: 0.5, color: 'white' }} />{username}</Typography>
+                <Typography variant='caption' sx={{ display: 'flex', alignItems: 'center', color: 'white', fontSize: 13, color: '#82b1ff' }}>
+                  <EventNoteRoundedIcon fontSize='small' sx={{ mr: 0.5, color: 'white' }} />13 May 2022</Typography>
               </Box>
             </Box>
-            <LoginTextField label='Content' variant='outlined' placeholder="Writing something about Japan......"
-              multiline rows={12} InputLabelProps={{ style: { color: 'white' } }} inputProps={{ style: { color: "white" } }} />
-            <Button variant='contained' color='inherit' startIcon={<PostAddIcon />} onClick={() => { handleLogin(); toggleLoginWindow(); }}
+            <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+              <LoginTextField label='Content' variant='outlined' placeholder="Writing something about Japan......" autoFocus
+                multiline rows={5} InputLabelProps={{ style: { color: 'white' } }} inputProps={{ style: { color: "white" } }} />
+              <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+                <Button variant="contained" component="label" disableElevation color='info'
+                  sx={{ textTransform: 'none', width: '5%', borderRadius: 0 }}>
+                  <FaceRetouchingNaturalRoundedIcon fontSize='small' />
+                  <input type="file" hidden />
+                </Button>
+                <Button startIcon={<AddPhotoAlternateIcon />} variant="contained" component="label" color='success' disableElevation
+                  sx={{ fontSize: 16, textTransform: 'none', width: '100%', borderRadius: 0 }}>
+                  <input type="file" hidden />
+                  Upload Image
+                </Button>
+              </Box>
+            </Box>
+            <Button variant='contained' color='inherit' startIcon={<PostAddIcon />} onClick={toggleCreateWindow}
               sx={{ height: 52, fontSize: 18, textTransform: 'none' }}>
               Post
             </Button>
           </CreateBox>
         </Fade>
       </Modal>
-      <StyledTooltip title='Create'>
-        <Fab aria-label='create' onClick={toggleCreateWindow}>
-          <EditIcon />
-        </Fab>
-      </StyledTooltip>
     </>
   );
 };

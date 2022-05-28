@@ -18,7 +18,7 @@ function App() {
   const theme = createTheme({
     palette: {
       mode: appTheme,
-    },
+    }
   });
 
   return (

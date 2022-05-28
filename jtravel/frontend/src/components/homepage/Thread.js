@@ -73,13 +73,13 @@ function Thread() {
 
   return (
     <Box paddingTop={8} flex={2} sx={{ display: 'flex', flexDirection: 'column-reverse' }}>
-      {/* Thread */}
       {thread.map((item, index) => {
         return ( 
           <Card key={index} sx={{ margin: 3, borderRadius: '16px' }}>
             <CardHeader
               titleTypographyProps={{ fontSize: 18 }}
-              avatar={<Avatar sx={{ backgroundColor: red[500] }} aria-label='family'>A</Avatar>}
+              avatar={<Avatar src={item.profile_image} aria-label={item.username} 
+                sx={{ height: 50, width: 50 }} />}
               action={<IconButton aria-label='settings'><MoreVertIcon /></IconButton>}
               title={item.username}
               subheader={item.created} />
@@ -89,7 +89,6 @@ function Thread() {
                 {item.content}
               </Typography>
             </CardContent>
-            {/* Action Button */}
             <CardActions disableSpacing>
               <IconButton aria-label='add to favorites'>
                 <Checkbox checked={like} onChange={toggleLikeButton}
