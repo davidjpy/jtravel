@@ -169,8 +169,6 @@ const MaterialUISwitch = styled(Switch)(({ theme }) => ({
 
 function Sidebar({ appTheme, setAppTheme }) {
 
-
-  
   const theme = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
@@ -206,14 +204,16 @@ function Sidebar({ appTheme, setAppTheme }) {
 
   useEffect(() => {
     const verifyUser = async () => {
-      try {
-        await getUser();
-      }
-      catch (err) {
-        console.error(err)
-      }
-      finally {
-        setIsLoading(false);
+      if (!auth.user) {
+        try {
+          await getUser();
+        }
+        catch (err) {
+          console.error(err)
+        }
+        finally {
+          setIsLoading(false);
+        };
       };
     };
     verifyUser();
@@ -291,7 +291,8 @@ function Sidebar({ appTheme, setAppTheme }) {
         'password': password1
       });
       toggleRegisterAlert();
-    } catch (err) {
+    }
+    catch (err) {
       toggleRegisterFailedAlert();
     };
   };
@@ -314,7 +315,8 @@ function Sidebar({ appTheme, setAppTheme }) {
           navigate(from, { replace: true })
         });
       toggleLoginAlert();
-    } catch (err) {
+    }
+    catch (err) {
       toggleLoginFailedAlert();
     };
   };
@@ -329,7 +331,8 @@ function Sidebar({ appTheme, setAppTheme }) {
       localStorage.removeItem('user_id')
       axiosInstance.defaults.headers['Authorization'] = null;
       setAuth('');
-    } catch (err) {
+    }
+    catch (err) {
       console.log(err);
     }
   };
@@ -491,7 +494,7 @@ function Sidebar({ appTheme, setAppTheme }) {
                         },
                       }}>
                       <MenuItem onClick={() => { closeAccountMenu(); navigate('profile/') }}>
-                        <Avatar src={user.profile_image}/> Profile
+                        <Avatar src={user.profile_image} /> Profile
                       </MenuItem>
                       <Divider />
                       <MenuItem onClick={closeAccountMenu}>

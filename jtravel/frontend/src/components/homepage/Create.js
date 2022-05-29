@@ -12,6 +12,7 @@ import {
   Button,
   Avatar,
 } from '@mui/material'
+import moment from 'moment'
 import { styled } from '@mui/material/styles';
 import EditIcon from '@mui/icons-material/Edit';
 import PostAddIcon from '@mui/icons-material/PostAdd';
@@ -20,12 +21,16 @@ import EventNoteRoundedIcon from '@mui/icons-material/EventNoteRounded';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import FaceRetouchingNaturalRoundedIcon from '@mui/icons-material/FaceRetouchingNaturalRounded';
 
+import axiosInstance from '../../utils/Axios';
+
+const create_URL = 'api/public/thread/';
+
 const StyledTooltip = styled(Tooltip)(({ theme }) => ({
   position: 'fixed',
   color: 'white',
   backgroundColor: '#455a64',
-  "&:hover": {
-    backgroundColor: "#b0bec5"
+  '&:hover': {
+    backgroundColor: '#b0bec5'
   },
   [theme.breakpoints.up('md')]: {
     right: 'calc(25% + 75px)',
@@ -71,13 +76,27 @@ const LoginTextField = styled(TextField)({
 });
 
 
-function Create({ auth }) {
+function Create({ auth, openCreate, setOpenCreate }) {
 
-  const [openCreate, setOpenCreate] = useState(false);
   const { username, profile_image } = auth;
+  const [content, setContent] = useState('');
 
   const toggleCreateWindow = () => {
     setOpenCreate(!openCreate);
+  };
+
+  const handleCreateThread = async () => {
+    try {
+      await axiosInstance.post(create_URL, {
+      'username': username,
+      'alt': content,
+      'content': content,
+      'created': moment().format('YYYY-MM-DDThh:mm:ss')
+      });
+    }
+    catch (err) {
+      console.error(err);
+    };
   };
 
   return (
@@ -104,22 +123,23 @@ function Create({ auth }) {
               </Box>
             </Box>
             <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-              <LoginTextField label='Content' variant='outlined' placeholder="Writing something about Japan......" autoFocus
-                multiline rows={5} InputLabelProps={{ style: { color: 'white' } }} inputProps={{ style: { color: "white" } }} />
+              <LoginTextField label='Content' variant='outlined' placeholder='Writing something about Japan......' autoFocus
+                onChange={e => setContent(e.target.value)} multiline rows={5} 
+                InputLabelProps={{ style: { color: 'white' } }} inputProps={{ style: { color: 'white' } }} />
               <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-                <Button variant="contained" component="label" disableElevation color='info'
+                <Button variant='contained' component='label' disableElevation color='info'
                   sx={{ textTransform: 'none', width: '5%', borderRadius: 0 }}>
                   <FaceRetouchingNaturalRoundedIcon fontSize='small' />
-                  <input type="file" hidden />
+                  <input type='file' hidden />
                 </Button>
-                <Button startIcon={<AddPhotoAlternateIcon />} variant="contained" component="label" color='success' disableElevation
+                <Button startIcon={<AddPhotoAlternateIcon />} variant='contained' component='label' color='success' disableElevation
                   sx={{ fontSize: 16, textTransform: 'none', width: '100%', borderRadius: 0 }}>
-                  <input type="file" hidden />
+                  <input type='file' hidden />
                   Upload Image
                 </Button>
               </Box>
             </Box>
-            <Button variant='contained' color='inherit' startIcon={<PostAddIcon />} onClick={toggleCreateWindow}
+            <Button variant='contained' color='inherit' startIcon={<PostAddIcon />} onClick={() => {handleCreateThread(); toggleCreateWindow();}}
               sx={{ height: 52, fontSize: 18, textTransform: 'none' }}>
               Post
             </Button>

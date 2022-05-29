@@ -13,6 +13,7 @@ function HomePage() {
   const getUser = useGetUser();
   const { auth } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
+  const [openCreate, setOpenCreate] = useState(false);
 
   useEffect(() => {
     const verifyUser = async () => {
@@ -37,10 +38,10 @@ function HomePage() {
         <Box bgcolor={'background.default'} color={'text.primary'}>
           <Stack direction='row' justifyContent='space-between'>
             <Suggest />
-            <Thread />
+            <Thread openCreate={openCreate} />
             <Social />
           </Stack>
-          <Create auth={auth.user} />
+          <Create auth={auth.user} openCreate={openCreate} setOpenCreate={setOpenCreate} />
         </Box>
       )};
     </>

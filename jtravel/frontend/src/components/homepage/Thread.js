@@ -1,7 +1,6 @@
 import React, { useState, forwardRef, useEffect } from 'react'
 import { Box, Snackbar, Card, CardHeader, CardMedia, CardContent, CardActions, Avatar, IconButton, Typography, List, ListItem, ListItemAvatar, ListItemText, Divider, Checkbox } from '@mui/material';
 import MuiAlert from '@mui/material/Alert';
-import { red } from '@mui/material/colors';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShareIcon from '@mui/icons-material/Share';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
@@ -9,17 +8,26 @@ import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
 import BookmarkBorderOutlinedIcon from '@mui/icons-material/BookmarkBorderOutlined';
 import BookmarkRoundedIcon from '@mui/icons-material/BookmarkRounded';
 
-import useAxiosFetch from '../../hooks/useAxiosFetch';
+import axiosInstance from '../../utils/Axios';
 
 // import faker from  'faker';
 
-function Thread() {
+function Thread({ openCreate }) {
 
-  const { data } = useAxiosFetch('http://127.0.0.1:8000/api/public/thread/');
+  const Thread_Url = 'http://127.0.0.1:8000/api/public/thread/'
 
   useEffect(() => {
-    setThread(data);
-  }, [data])
+    const verifyContent = async () => {
+      try {
+        const response = await axiosInstance.get(Thread_Url);
+        setThread(response.data);
+      }
+      catch (err) {
+        console.error(err);
+      };
+    };
+    verifyContent();
+  }, [openCreate])
 
   const [thread, setThread] = useState([])
   const [like, setLike] = useState(false);

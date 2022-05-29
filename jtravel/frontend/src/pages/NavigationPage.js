@@ -1,8 +1,7 @@
 import './NavigationPage.css'
-import * as React from 'react';
+import React from 'react';
 import videoBg from '../assets/videos/japan_bg2kTrim.mp4'
 import { Checkbox } from '@mui/material';
-import IconButton from '@mui/material/IconButton';
 import VolumeUpOutlinedIcon from '@mui/icons-material/VolumeUpOutlined';
 import VolumeOffOutlinedIcon from '@mui/icons-material/VolumeOffOutlined';
 
