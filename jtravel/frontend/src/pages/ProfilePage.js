@@ -14,7 +14,6 @@ function ProfilePage() {
   const { auth, profileThread } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
 
-
   useEffect(() => {
     const verifyUser = async () => {
       try {

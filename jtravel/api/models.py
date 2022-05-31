@@ -7,7 +7,7 @@ def thread_image_path(instance, filename):
     return os.path.join(
         'images',
         'threads',
-        'thread_id_' + str(instance.id),
+        'thread_username_' + str(instance.username),
         filename
     )
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Tooltip,
   Fab,
@@ -75,29 +75,40 @@ const LoginTextField = styled(TextField)({
   }
 });
 
-
 function Create({ auth, openCreate, setOpenCreate }) {
 
   const { username, profile_image } = auth;
   const [content, setContent] = useState('');
+  const [image, setImage] = useState([]);
 
   const toggleCreateWindow = () => {
     setOpenCreate(!openCreate);
   };
 
+  const handleUploadImage = (e) => {
+    setImage(e.target.files[0]);
+  };
+
   const handleCreateThread = async () => {
     try {
-      await axiosInstance.post(create_URL, {
-      'username': username,
-      'alt': content,
-      'content': content,
-      'created': moment().format('YYYY-MM-DDThh:mm:ss')
+      const formData = new FormData();
+      formData.append('username', username);
+      formData.append('alt', content);
+      formData.append('image', image);
+      formData.append('content', content);
+      formData.append('created', moment().format('YYYY-MM-DDThh:mm:ss'));
+
+      await axiosInstance.post(create_URL, formData, {
+        headers: 
+        {
+          'content-type': 'multipart/form-data'
+        }
       });
     }
     catch (err) {
       console.error(err);
     };
-  };
+  };  
 
   return (
     <>
@@ -134,12 +145,12 @@ function Create({ auth, openCreate, setOpenCreate }) {
                 </Button>
                 <Button startIcon={<AddPhotoAlternateIcon />} variant='contained' component='label' color='success' disableElevation
                   sx={{ fontSize: 16, textTransform: 'none', width: '100%', borderRadius: 0 }}>
-                  <input type='file' hidden />
+                  <input type='file' multiple accept='image/*' hidden onChange={handleUploadImage} />
                   Upload Image
                 </Button>
               </Box>
             </Box>
-            <Button variant='contained' color='inherit' startIcon={<PostAddIcon />} onClick={() => {handleCreateThread(); toggleCreateWindow();}}
+            <Button variant='contained' color='inherit' startIcon={<PostAddIcon />} onClick={async () => { await handleCreateThread(); toggleCreateWindow(); }}
               sx={{ height: 52, fontSize: 18, textTransform: 'none' }}>
               Post
             </Button>
@@ -151,3 +162,5 @@ function Create({ auth, openCreate, setOpenCreate }) {
 };
 
 export default Create;
+
+

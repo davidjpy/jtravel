@@ -14,7 +14,7 @@ import axiosInstance from '../../utils/Axios';
 
 function Thread({ openCreate }) {
 
-  const Thread_Url = 'http://127.0.0.1:8000/api/public/thread/'
+  const Thread_Url = 'http://localhost:8000/api/public/thread/'
 
   useEffect(() => {
     const verifyContent = async () => {

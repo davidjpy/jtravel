@@ -28,14 +28,8 @@ function Media({ profileThread }) {
         <BottomNavigationAction label="Nearby" icon={<LocationOnIcon />} />
       </BottomNavigation>
       <ImageList cols={3} rowHeight='auto' sx={{ mt: 2, width: 920, overflow: 'unset' }}>
-        {profileThread.map((item, index) => (
-          <ImageListItem key={index} sx={{ padding: 0.5 }}>
-            <img
-              src={item.image}
-              alt={item.alt}
-              loading="lazy"
-            />
-          </ImageListItem>  
+        {profileThread.map((item) => (
+          <ThreadItem key={item.image} {...item} />
         ))}
       </ImageList>
     </StyledBox>
@@ -43,3 +37,39 @@ function Media({ profileThread }) {
 };
 
 export default Media;
+
+function ThreadItem({ image, alt }) {
+
+  const [hover, setHover] = useState(false);
+  const [openThread, setOpenThread] = useState(false);
+
+  const toggleThreadWindow = () => {
+    setOpenThread(!openThread);
+  };
+
+  return (
+    <ImageListItem sx={{ padding: 0.5 }}>
+    <img
+      src={image}
+      alt={alt}
+      loading="lazy"
+      onMouseOver={() => { setHover(true) }}
+      onMouseOut={() => { setHover(false) }}
+      onClick={toggleThreadWindow}
+      style={
+        hover ?
+          {
+            zIndex: 1,
+            transform: 'scale(1.1, 1.1)',
+            boxShadow: '20px 20px 15px -4px #000000',
+            transition: '0.5s',
+            opacity: 0.85,
+            cursor: 'pointer'
+          } : {
+            transition: '0.5s',
+          }
+      }
+    />
+  </ImageListItem>  
+  );
+};

@@ -202,22 +202,22 @@ function Sidebar({ appTheme, setAppTheme }) {
   const { auth, setAuth, requireLoginAlert, setRequireLoginAlert } = useAuth();
   const { user } = auth;
 
-  useEffect(() => {
-    const verifyUser = async () => {
-      if (!auth.user) {
-        try {
-          await getUser();
-        }
-        catch (err) {
-          console.error(err)
-        }
-        finally {
-          setIsLoading(false);
-        };
-      };
-    };
-    verifyUser();
-  }, []);
+  // useEffect(() => {
+  //   const verifyUser = async () => {
+  //     if (!auth.user) {
+  //       try {
+  //         await getUser();
+  //       }
+  //       catch (err) {
+  //         console.error(err)
+  //       }
+  //       finally {
+  //         setIsLoading(false);
+  //       };
+  //     };
+  //   };
+  //   verifyUser();
+  // }, []);
 
   const toggleLoginWindow = () => {
     setOpenLogin(!openLogin);
@@ -351,98 +351,98 @@ function Sidebar({ appTheme, setAppTheme }) {
 
   return (
     <>
-      {isLoading ? (
+      {/* {isLoading ? (
         <p>Loading...</p>
-      ) : (
-        <Box>
-          {/* Login Form */}
-          <Modal aria-labelledby='login' aria-describedby='login page' open={openLogin} onClose={toggleLoginWindow}
-            closeAfterTransition BackdropComponent={Backdrop} BackdropProps={{ timeout: 500 }}>
-            <Fade in={openLogin}>
-              <LoginBox>
-                <Typography variant='h4' color='white'>
+      ) : ( */}
+      <Box>
+        {/* Login Form */}
+        <Modal aria-labelledby='login' aria-describedby='login-page' open={openLogin} onClose={toggleLoginWindow}
+          closeAfterTransition BackdropComponent={Backdrop} BackdropProps={{ timeout: 500 }}>
+          <Fade in={openLogin}>
+            <LoginBox>
+              <Typography variant='h4' color='white'>
+                Sign In
+              </Typography>
+              <Box component='form' noValidate autoComplete='new-password' sx={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                <LoginTextField label='Email' variant='outlined' onChange={(e) => setLoginEmail(e.target.value)}
+                  InputLabelProps={{ style: { color: 'white' } }} />
+                <LoginTextField label='Password' variant='outlined' type='password' onChange={(e) => setLoginPassword(e.target.value)}
+                  InputLabelProps={{ style: { color: 'white' } }} />
+              </Box>
+              <Button variant='contained' color='inherit' startIcon={<LoginRoundedIcon />} onClick={() => { handleLogin(); toggleLoginWindow(); }}
+                sx={{ height: 52, fontSize: 18, textTransform: 'none' }}>
+                Login
+              </Button>
+              <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end ' }}>
+                <Button onClick={() => { toggleLoginWindow(); toggleRegistration(); }} sx={{ fontSize: 15, color: '#03a9f4', textTransform: 'none' }}>
+                  Create an Account
+                </Button>
+              </Box>
+            </LoginBox>
+          </Fade>
+        </Modal>
+        {/* Registration Form */}
+        <Modal open={openRegistration} onClose={toggleRegistration} aria-labelledby='registration' aria-describedby='registration-page'
+          BackdropComponent={Backdrop} BackdropProps={{ timeout: 500 }} >
+          <Fade in={openRegistration}>
+            <SignUpBox>
+              <Typography variant='h4' color='white'>
+                Sign Up
+              </Typography>
+              <Box component='form' noValidate sx={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                <LoginTextField name='email' label='Email' variant='outlined'
+                  helperText={email.length > 0 ? emailError : ''} error={email.length > 0 && emailError.length > 0 ? true : false}
+                  onChange={e => setEmail(e.target.value)} InputLabelProps={{ style: { color: 'white' } }} />
+                <LoginTextField name='username' label='User ID' variant='outlined'
+                  helperText={username.length > 0 ? usernameError : ''} error={username.length > 0 && usernameError.length > 0 ? true : false}
+                  onChange={e => setUsername(e.target.value)} InputLabelProps={{ style: { color: 'white' } }} />
+                <LoginTextField name='name' label='Name' variant='outlined'
+                  onChange={e => setName(e.target.value)} InputLabelProps={{ style: { color: 'white' } }} />
+                <LoginTextField name='password1' label='Password' variant='outlined' type='password'
+                  helperText={password1.length > 0 ? passwordError : ''} error={password1.length > 0 && passwordError.length > 0 ? true : false}
+                  onChange={e => setPassword1(e.target.value)} InputLabelProps={{ style: { color: 'white' } }} />
+                <LoginTextField name='password2' label='Confirm Password' variant='outlined' type='password'
+                  helperText={password2.length > 0 ? matchError : ''} error={password2.length > 0 && matchError.length > 0 ? true : false}
+                  onChange={e => setPassword2(e.target.value)} InputLabelProps={{ style: { color: 'white' } }} />
+              </Box>
+              <Button variant='contained' color='inherit' disabled={isError ? true : false} startIcon={<VpnKeyRoundedIcon />}
+                onClick={() => { handleRegistration(); toggleRegistration(); }}
+                sx={{ height: 52, fontSize: 18, textTransform: 'none' }}>
+                Register
+              </Button>
+              <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end ' }}>
+                <Button onClick={() => { toggleLoginWindow(); toggleRegistration(); }}
+                  sx={{ fontSize: 15, color: '#03a9f4', textTransform: 'none' }}>
                   Sign In
-                </Typography>
-                <Box component='form' noValidate autoComplete='new-password' sx={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-                  <LoginTextField label='Email' variant='outlined' onChange={(e) => setLoginEmail(e.target.value)}
-                    InputLabelProps={{ style: { color: 'white' } }} />
-                  <LoginTextField label='Password' variant='outlined' type='password' onChange={(e) => setLoginPassword(e.target.value)}
-                    InputLabelProps={{ style: { color: 'white' } }} />
-                </Box>
-                <Button variant='contained' color='inherit' startIcon={<LoginRoundedIcon />} onClick={() => { handleLogin(); toggleLoginWindow(); }}
-                  sx={{ height: 52, fontSize: 18, textTransform: 'none' }}>
-                  Login
                 </Button>
-                <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end ' }}>
-                  <Button onClick={() => { toggleLoginWindow(); toggleRegistration(); }} sx={{ fontSize: 15, color: '#03a9f4', textTransform: 'none' }}>
-                    Create an Account
-                  </Button>
-                </Box>
-              </LoginBox>
-            </Fade>
-          </Modal>
-          {/* Registration Form */}
-          <Modal open={openRegistration} onClose={toggleRegistration} aria-labelledby='Registration Page' aria-describedby='Registration Page'
-            BackdropComponent={Backdrop} BackdropProps={{ timeout: 500 }} >
-            <Fade in={openRegistration}>
-              <SignUpBox>
-                <Typography variant='h4' color='white'>
-                  Sign Up
-                </Typography>
-                <Box component='form' noValidate sx={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-                  <LoginTextField name='email' label='Email' variant='outlined'
-                    helperText={email.length > 0 ? emailError : ''} error={email.length > 0 && emailError.length > 0 ? true : false}
-                    onChange={e => setEmail(e.target.value)} InputLabelProps={{ style: { color: 'white' } }} />
-                  <LoginTextField name='username' label='User ID' variant='outlined'
-                    helperText={username.length > 0 ? usernameError : ''} error={username.length > 0 && usernameError.length > 0 ? true : false}
-                    onChange={e => setUsername(e.target.value)} InputLabelProps={{ style: { color: 'white' } }} />
-                  <LoginTextField name='name' label='Name' variant='outlined'
-                    onChange={e => setName(e.target.value)} InputLabelProps={{ style: { color: 'white' } }} />
-                  <LoginTextField name='password1' label='Password' variant='outlined' type='password'
-                    helperText={password1.length > 0 ? passwordError : ''} error={password1.length > 0 && passwordError.length > 0 ? true : false}
-                    onChange={e => setPassword1(e.target.value)} InputLabelProps={{ style: { color: 'white' } }} />
-                  <LoginTextField name='password2' label='Confirm Password' variant='outlined' type='password'
-                    helperText={password2.length > 0 ? matchError : ''} error={password2.length > 0 && matchError.length > 0 ? true : false}
-                    onChange={e => setPassword2(e.target.value)} InputLabelProps={{ style: { color: 'white' } }} />
-                </Box>
-                <Button variant='contained' color='inherit' disabled={isError ? true : false} startIcon={<VpnKeyRoundedIcon />}
-                  onClick={() => { handleRegistration(); toggleRegistration(); }}
-                  sx={{ height: 52, fontSize: 18, textTransform: 'none' }}>
-                  Register
-                </Button>
-                <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end ' }}>
-                  <Button onClick={() => { toggleLoginWindow(); toggleRegistration(); }}
-                    sx={{ fontSize: 15, color: '#03a9f4', textTransform: 'none' }}>
-                    Sign In
-                  </Button>
-                </Box>
-              </SignUpBox>
-            </Fade>
-          </Modal>
-          {/* App Bar */}
-          <Box>
-            <AppBar open={open} sx={{ bgcolor: '#263238' }}>
-              <Toolbar position='sticky'>
-                <IconButton aria-label='open drawer' onClick={toggleDrawer} edge='start'
-                  sx={{ color: 'inherit', mr: 6, ...(open && { display: 'none' }) }}>
-                  <MenuIcon />
-                </IconButton>
-                <Typography sx={{ display: { xs: 'none', sm: 'block' } }}>
-                  <Link to='/' style={{ fontSize: 22 }}>
-                    J - Travel
-                  </Link>
-                </Typography>
-                <Typography sx={{ flex: 1 }}>
-                </Typography>
-                {!auth?.accessToken
-                  ?
+              </Box>
+            </SignUpBox>
+          </Fade>
+        </Modal>
+        {/* App Bar */}
+        <Box>
+          <AppBar open={open} sx={{ bgcolor: '#263238' }}>
+            <Toolbar position='sticky'>
+              <IconButton aria-label='open drawer' onClick={toggleDrawer} edge='start'
+                sx={{ color: 'inherit', mr: 6, ...(open && { display: 'none' }) }}>
+                <MenuIcon />
+              </IconButton>
+              <Typography sx={{ display: { xs: 'none', sm: 'block' } }}>
+                <Link to='/' style={{ fontSize: 22 }}>
+                  J - Travel
+                </Link>
+              </Typography>
+              <Typography sx={{ flex: 1 }}>
+              </Typography>
+              {!auth?.accessToken
+                ? (
                   <>
                     <Button color='primary' variant='contained' onClick={toggleLoginWindow} startIcon={<VpnKeyRoundedIcon />}
                       sx={{ textTransform: 'none', fontSize: 14 }}>
                       Login
                     </Button>
                   </>
-                  :
+                ) : (
                   <>
                     <IconButton size='large' color='inherit' onClick={logger}>
                       <Badge badgeContent={11} color='error'>
@@ -466,7 +466,8 @@ function Sidebar({ appTheme, setAppTheme }) {
                         aria-haspopup="true"
                         aria-expanded={openAccountMenu ? 'true' : undefined}
                         sx={{ ml: 0.5, mr: 2 }}>
-                        <Avatar src={user.profile_image} sx={{ width: 28, height: 28 }} />
+                        {/* <Avatar src={user.profile_image} sx={{ width: 28, height: 28 }} /> */}
+                        <Avatar sx={{ width: 28, height: 28 }} />
                       </IconButton>
                     </Tooltip>
                     <Menu
@@ -494,7 +495,8 @@ function Sidebar({ appTheme, setAppTheme }) {
                         },
                       }}>
                       <MenuItem onClick={() => { closeAccountMenu(); navigate('profile/') }}>
-                        <Avatar src={user.profile_image} /> Profile
+                        {/* <Avatar src={user.profile_image} /> Profile */}
+                        <Avatar /> Profile
                       </MenuItem>
                       <Divider />
                       <MenuItem onClick={closeAccountMenu}>
@@ -543,96 +545,97 @@ function Sidebar({ appTheme, setAppTheme }) {
                       </MenuItem>
                     </Menu>
                   </>
-                }
-              </Toolbar>
-            </AppBar>
-            {/* Drawer */}
-            <Drawer sx={{ width: drawerWidth, flexShrink: 0, '& .MuiDrawer-paper': { width: drawerWidth, boxSizing: 'border-box' } }}
-              onBackdropClick={toggleDrawer} variant='temporary' anchor='left' open={open}>
-              <DrawerHeader>
-                <IconButton onClick={toggleDrawer}>
-                  {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-                </IconButton>
-              </DrawerHeader>
-              <Divider />
-              <List>
-                {WebIcon.map((item, index) => {
-                  return (
-                    <Link to='home/' key={index}>
-                      <ListItemButton sx={{ minHeight: 48, justifyContent: open ? 'initial' : 'center', px: 2.5, }}>
-                        <ListItemIcon sx={{ minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center' }}>
-                          {item.icon}
-                        </ListItemIcon>
-                        <ListItemText primary={item.title} sx={{ opacity: open ? 1 : 0 }} />
-                      </ListItemButton>
-                    </Link>
-                  )
-                })}
-              </List>
-              <Divider />
-              <List>
-                {UserIcon.map((item, index) => {
-                  return (
-                    <ListItemButton key={index}
-                      sx={{ minHeight: 48, justifyContent: open ? 'initial' : 'center', px: 2.5 }}>
+                )
+              }
+            </Toolbar>
+          </AppBar>
+          {/* Drawer */}
+          <Drawer sx={{ width: drawerWidth, flexShrink: 0, '& .MuiDrawer-paper': { width: drawerWidth, boxSizing: 'border-box' } }}
+            onBackdropClick={toggleDrawer} variant='temporary' anchor='left' open={open}>
+            <DrawerHeader>
+              <IconButton onClick={toggleDrawer}>
+                {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+              </IconButton>
+            </DrawerHeader>
+            <Divider />
+            <List>
+              {WebIcon.map((item, index) => {
+                return (
+                  <Link to='home/' key={index}>
+                    <ListItemButton sx={{ minHeight: 48, justifyContent: open ? 'initial' : 'center', px: 2.5, }}>
                       <ListItemIcon sx={{ minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center' }}>
                         {item.icon}
                       </ListItemIcon>
                       <ListItemText primary={item.title} sx={{ opacity: open ? 1 : 0 }} />
                     </ListItemButton>
-                  )
-                })}
-              </List>
-              <Divider />
-              <List>
-                {FunctionIcon.map((item, index) => {
-                  return (
-                    <ListItemButton key={index}
-                      sx={{ minHeight: 48, justifyContent: open ? 'initial' : 'center', px: 2.5 }}>
-                      <ListItemIcon sx={{ minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center' }}>
-                        {item.icon}
-                      </ListItemIcon>
-                      <ListItemText primary={item.title} sx={{ opacity: open ? 1 : 0 }} />
-                    </ListItemButton>
-                  )
-                })}
-              </List>
-            </Drawer>
-          </Box>
-          {/* Registration Alert */}
-          <Snackbar open={registerAlert} autoHideDuration={5000} onClose={closeRegisterAlert}>
-            <Alert severity='success' onClose={closeRegisterAlert}
-              sx={{ bgcolor: '#1b5e20', color: 'white', width: '100%' }}>
-              You've Successfully Registered your Account
-            </Alert>
-          </Snackbar>
-          <Snackbar open={registerFailedAlert} autoHideDuration={5000} onClose={closeRegisterFailedAlert}>
-            <Alert severity='error' onClose={closeRegisterFailedAlert}
-              sx={{ bgcolor: '#b71c1c', color: 'white', width: '100%' }}>
-              Registration Failed. User ID has been Taken
-            </Alert>
-          </Snackbar>
-          {/* Login Alert */}
-          <Snackbar open={loginAlert} autoHideDuration={5000} onClose={closeLoginAlert}>
-            <Alert severity='success' onClose={closeLoginAlert}
-              sx={{ bgcolor: '#1b5e20', color: 'white', width: '100%' }}>
-              You've Successfully Login to Your Account
-            </Alert>
-          </Snackbar>
-          <Snackbar open={loginFailedAlert} autoHideDuration={5000} onClose={closeLoginFailedAlert}>
-            <Alert severity='error' onClose={closeLoginFailedAlert}
-              sx={{ bgcolor: '#b71c1c', color: 'white', width: '100%' }}>
-              Login Failed. Incorrect Email or Password
-            </Alert>
-          </Snackbar>
-          <Snackbar open={requireLoginAlert} autoHideDuration={3000} onClose={closeRequireLoginAlert}>
-            <Alert severity='error' onClose={closeRequireLoginAlert}
-              sx={{ bgcolor: '#b71c1c', color: 'white', width: '100%' }}>
-              Login Required
-            </Alert>
-          </Snackbar>
+                  </Link>
+                )
+              })}
+            </List>
+            <Divider />
+            <List>
+              {UserIcon.map((item, index) => {
+                return (
+                  <ListItemButton key={index}
+                    sx={{ minHeight: 48, justifyContent: open ? 'initial' : 'center', px: 2.5 }}>
+                    <ListItemIcon sx={{ minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center' }}>
+                      {item.icon}
+                    </ListItemIcon>
+                    <ListItemText primary={item.title} sx={{ opacity: open ? 1 : 0 }} />
+                  </ListItemButton>
+                )
+              })}
+            </List>
+            <Divider />
+            <List>
+              {FunctionIcon.map((item, index) => {
+                return (
+                  <ListItemButton key={index}
+                    sx={{ minHeight: 48, justifyContent: open ? 'initial' : 'center', px: 2.5 }}>
+                    <ListItemIcon sx={{ minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center' }}>
+                      {item.icon}
+                    </ListItemIcon>
+                    <ListItemText primary={item.title} sx={{ opacity: open ? 1 : 0 }} />
+                  </ListItemButton>
+                )
+              })}
+            </List>
+          </Drawer>
         </Box>
-      )};
+        {/* Registration Alert */}
+        <Snackbar open={registerAlert} autoHideDuration={5000} onClose={closeRegisterAlert}>
+          <Alert severity='success' onClose={closeRegisterAlert}
+            sx={{ bgcolor: '#1b5e20', color: 'white', width: '100%' }}>
+            You've Successfully Registered your Account
+          </Alert>
+        </Snackbar>
+        <Snackbar open={registerFailedAlert} autoHideDuration={5000} onClose={closeRegisterFailedAlert}>
+          <Alert severity='error' onClose={closeRegisterFailedAlert}
+            sx={{ bgcolor: '#b71c1c', color: 'white', width: '100%' }}>
+            Registration Failed. User ID has been Taken
+          </Alert>
+        </Snackbar>
+        {/* Login Alert */}
+        <Snackbar open={loginAlert} autoHideDuration={5000} onClose={closeLoginAlert}>
+          <Alert severity='success' onClose={closeLoginAlert}
+            sx={{ bgcolor: '#1b5e20', color: 'white', width: '100%' }}>
+            You've Successfully Login to Your Account
+          </Alert>
+        </Snackbar>
+        <Snackbar open={loginFailedAlert} autoHideDuration={5000} onClose={closeLoginFailedAlert}>
+          <Alert severity='error' onClose={closeLoginFailedAlert}
+            sx={{ bgcolor: '#b71c1c', color: 'white', width: '100%' }}>
+            Login Failed. Incorrect Email or Password
+          </Alert>
+        </Snackbar>
+        <Snackbar open={requireLoginAlert} autoHideDuration={3000} onClose={closeRequireLoginAlert}>
+          <Alert severity='error' onClose={closeRequireLoginAlert}
+            sx={{ bgcolor: '#b71c1c', color: 'white', width: '100%' }}>
+            Login Required
+          </Alert>
+        </Snackbar>
+      </Box>
+      {/* )}; */}
     </>
   );
 };
