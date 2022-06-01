@@ -194,30 +194,12 @@ function Sidebar({ appTheme, setAppTheme }) {
   const [loginEmail, setLoginEmail] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
   const [anchorEl, setAnchorEl] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
 
   const openAccountMenu = Boolean(anchorEl);
   const { emailError, usernameError, passwordError, matchError, isError }
     = useValidation(email, username, password1, password2);
   const { auth, setAuth, requireLoginAlert, setRequireLoginAlert } = useAuth();
   const { user } = auth;
-
-  // useEffect(() => {
-  //   const verifyUser = async () => {
-  //     if (!auth.user) {
-  //       try {
-  //         await getUser();
-  //       }
-  //       catch (err) {
-  //         console.error(err)
-  //       }
-  //       finally {
-  //         setIsLoading(false);
-  //       };
-  //     };
-  //   };
-  //   verifyUser();
-  // }, []);
 
   const toggleLoginWindow = () => {
     setOpenLogin(!openLogin);
@@ -466,8 +448,8 @@ function Sidebar({ appTheme, setAppTheme }) {
                         aria-haspopup="true"
                         aria-expanded={openAccountMenu ? 'true' : undefined}
                         sx={{ ml: 0.5, mr: 2 }}>
-                        {/* <Avatar src={user.profile_image} sx={{ width: 28, height: 28 }} /> */}
-                        <Avatar sx={{ width: 28, height: 28 }} />
+                        <Avatar src={user?.profile_image} aria-label={user?.username}
+                          sx={{ width: 28, height: 28 }} />
                       </IconButton>
                     </Tooltip>
                     <Menu
@@ -495,8 +477,7 @@ function Sidebar({ appTheme, setAppTheme }) {
                         },
                       }}>
                       <MenuItem onClick={() => { closeAccountMenu(); navigate('profile/') }}>
-                        {/* <Avatar src={user.profile_image} /> Profile */}
-                        <Avatar /> Profile
+                        <Avatar src={user?.profile_image} aria-label={user?.username} /> Profile
                       </MenuItem>
                       <Divider />
                       <MenuItem onClick={closeAccountMenu}>

@@ -81,6 +81,9 @@ function Create({ auth, openCreate, setOpenCreate }) {
   const [content, setContent] = useState('');
   const [image, setImage] = useState([]);
 
+  const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' }
+  const currentDate = new Date().toLocaleString('en-US', options)
+
   const toggleCreateWindow = () => {
     setOpenCreate(!openCreate);
   };
@@ -130,7 +133,7 @@ function Create({ auth, openCreate, setOpenCreate }) {
                 <Typography variant='caption' sx={{ display: 'flex', alignItems: 'center', color: 'white', fontSize: 13, color: '#82b1ff' }}>
                   <PersonIcon fontSize='small' sx={{ mr: 0.5, color: 'white' }} />{username}</Typography>
                 <Typography variant='caption' sx={{ display: 'flex', alignItems: 'center', color: 'white', fontSize: 13, color: '#82b1ff' }}>
-                  <EventNoteRoundedIcon fontSize='small' sx={{ mr: 0.5, color: 'white' }} />13 May 2022</Typography>
+                  <EventNoteRoundedIcon fontSize='small' sx={{ mr: 0.5, color: 'white' }} />{currentDate}</Typography>
               </Box>
             </Box>
             <Box sx={{ display: 'flex', flexDirection: 'column' }}>
