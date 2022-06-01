@@ -1,30 +1,32 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { styled, useTheme } from '@mui/material/styles';
 import MuiAppBar from '@mui/material/AppBar';
-import { FormControlLabel,
-         Switch,
-         Menu,
-         Avatar,
-         Tooltip,
-         MenuItem,
-         Modal,
-         ListItemText,
-         ListItemButton,
-         IconButton,
-         Divider,
-         Typography,
-         List,
-         Toolbar,
-         Drawer,
-         Box,
-         Badge,
-         Backdrop,
-         Fade,
-         alpha,
-         TextField,
-         Button,
-         Snackbar,
-         Alert } from '@mui/material';
+import {
+  FormControlLabel,
+  Switch,
+  Menu,
+  Avatar,
+  Tooltip,
+  MenuItem,
+  Modal,
+  ListItemText,
+  ListItemButton,
+  IconButton,
+  Divider,
+  Typography,
+  List,
+  Toolbar,
+  Drawer,
+  Box,
+  Badge,
+  Backdrop,
+  Fade,
+  alpha,
+  TextField,
+  Button,
+  Snackbar,
+  Alert
+} from '@mui/material';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
@@ -44,6 +46,7 @@ import { WebIcon, UserIcon, FunctionIcon } from './SidebarButtons';
 import useValidation from '../../hooks/useValidation';
 import useAuth from '../../hooks/useAuth';
 import axiosInstance from '../../utils/Axios';
+import useGetUser from '../../hooks/useGetUser';
 
 const drawerWidth = 180;
 
@@ -169,6 +172,7 @@ function Sidebar({ appTheme, setAppTheme }) {
   const theme = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
+  const getUser = useGetUser();
 
   const from = location.state?.from?.pathname || '/';
   const register_URL = 'account/auth/register/';
@@ -195,6 +199,7 @@ function Sidebar({ appTheme, setAppTheme }) {
   const { emailError, usernameError, passwordError, matchError, isError }
     = useValidation(email, username, password1, password2);
   const { auth, setAuth, requireLoginAlert, setRequireLoginAlert } = useAuth();
+  const { user } = auth;
 
   const toggleLoginWindow = () => {
     setOpenLogin(!openLogin);
@@ -268,7 +273,8 @@ function Sidebar({ appTheme, setAppTheme }) {
         'password': password1
       });
       toggleRegisterAlert();
-    } catch (err) {
+    }
+    catch (err) {
       toggleRegisterFailedAlert();
     };
   };
@@ -291,7 +297,8 @@ function Sidebar({ appTheme, setAppTheme }) {
           navigate(from, { replace: true })
         });
       toggleLoginAlert();
-    } catch (err) {
+    }
+    catch (err) {
       toggleLoginFailedAlert();
     };
   };
@@ -306,7 +313,8 @@ function Sidebar({ appTheme, setAppTheme }) {
       localStorage.removeItem('user_id')
       axiosInstance.defaults.headers['Authorization'] = null;
       setAuth('');
-    } catch (err) {
+    }
+    catch (err) {
       console.log(err);
     }
   };
@@ -324,284 +332,292 @@ function Sidebar({ appTheme, setAppTheme }) {
   };
 
   return (
-    <Box>
-      {/* Login Form */}
-      <Modal aria-labelledby='login' aria-describedby='login page' open={openLogin} onClose={toggleLoginWindow}
-        closeAfterTransition BackdropComponent={Backdrop} BackdropProps={{ timeout: 500 }}>
-        <Fade in={openLogin}>
-          <LoginBox>
-            <Typography variant='h4' color='white'>
-              Sign In
-            </Typography>
-            <Box component='form' noValidate autoComplete='new-password' sx={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-              <LoginTextField label='Email' variant='outlined' onChange={(e) => setLoginEmail(e.target.value)}
-                InputLabelProps={{ style: { color: 'white' } }} />
-              <LoginTextField label='Password' variant='outlined' type='password' onChange={(e) => setLoginPassword(e.target.value)}
-                InputLabelProps={{ style: { color: 'white' } }} />
-            </Box>
-            <Button variant='contained' color='inherit' startIcon={<LoginRoundedIcon />} onClick={() => { handleLogin(); toggleLoginWindow(); }}
-              sx={{ height: 52, fontSize: 18, textTransform: 'none' }}>
-              Login
-            </Button>
-            <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end ' }}>
-              <Button onClick={() => { toggleLoginWindow(); toggleRegistration(); }} sx={{ fontSize: 15, color: '#03a9f4', textTransform: 'none' }}>
-                Create an Account
-              </Button>
-            </Box>
-          </LoginBox>
-        </Fade>
-      </Modal>
-      {/* Registration Form */}
-      <Modal open={openRegistration} onClose={toggleRegistration} aria-labelledby='Registration Page' aria-describedby='Registration Page'
-        BackdropComponent={Backdrop} BackdropProps={{ timeout: 500 }} >
-        <Fade in={openRegistration}>
-          <SignUpBox>
-            <Typography variant='h4' color='white'>
-              Sign Up
-            </Typography>
-            <Box component='form' noValidate sx={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-              <LoginTextField name='email' label='Email' variant='outlined'
-                helperText={email.length > 0 ? emailError : ''} error={email.length > 0 && emailError.length > 0 ? true : false}
-                onChange={e => setEmail(e.target.value)} InputLabelProps={{ style: { color: 'white' } }} />
-              <LoginTextField name='username' label='User ID' variant='outlined'
-                helperText={username.length > 0 ? usernameError : ''} error={username.length > 0 && usernameError.length > 0 ? true : false}
-                onChange={e => setUsername(e.target.value)} InputLabelProps={{ style: { color: 'white' } }} />
-              <LoginTextField name='name' label='Name' variant='outlined'
-                onChange={e => setName(e.target.value)} InputLabelProps={{ style: { color: 'white' } }} />
-              <LoginTextField name='password1' label='Password' variant='outlined' type='password'
-                helperText={password1.length > 0 ? passwordError : ''} error={password1.length > 0 && passwordError.length > 0 ? true : false}
-                onChange={e => setPassword1(e.target.value)} InputLabelProps={{ style: { color: 'white' } }} />
-              <LoginTextField name='password2' label='Confirm Password' variant='outlined' type='password'
-                helperText={password2.length > 0 ? matchError : ''} error={password2.length > 0 && matchError.length > 0 ? true : false}
-                onChange={e => setPassword2(e.target.value)} InputLabelProps={{ style: { color: 'white' } }} />
-            </Box>
-            <Button variant='contained' color='inherit' disabled={isError ? true : false} startIcon={<VpnKeyRoundedIcon />}
-              onClick={() => { handleRegistration(); toggleRegistration(); }}
-              sx={{ height: 52, fontSize: 18, textTransform: 'none' }}>
-              Register
-            </Button>
-            <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end ' }}>
-              <Button onClick={() => { toggleLoginWindow(); toggleRegistration(); }}
-                sx={{ fontSize: 15, color: '#03a9f4', textTransform: 'none' }}>
-                Sign In
-              </Button>
-            </Box>
-          </SignUpBox>
-        </Fade>
-      </Modal>
-      {/* App Bar */}
+    <>
+      {/* {isLoading ? (
+        <p>Loading...</p>
+      ) : ( */}
       <Box>
-        <AppBar open={open} sx={{ bgcolor: '#263238' }}>
-          <Toolbar position='sticky'>
-            <IconButton aria-label='open drawer' onClick={toggleDrawer} edge='start'
-              sx={{ color: 'inherit', mr: 6, ...(open && { display: 'none' }) }}>
-              <MenuIcon />
-            </IconButton>
-            <Typography sx={{ display: { xs: 'none', sm: 'block' } }}>
-              <Link to='/' style={{ fontSize: 22 }}>
-                J - Travel
-              </Link>
-            </Typography>
-            <Typography sx={{ flex: 1 }}>
-            </Typography>
-            {!auth?.accessToken
-              ?
-              <>
-                <Button color='primary' variant='contained' onClick={toggleLoginWindow} startIcon={<VpnKeyRoundedIcon />}
-                  sx={{ textTransform: 'none', fontSize: 14 }}>
-                  Login
+        {/* Login Form */}
+        <Modal aria-labelledby='login' aria-describedby='login-page' open={openLogin} onClose={toggleLoginWindow}
+          closeAfterTransition BackdropComponent={Backdrop} BackdropProps={{ timeout: 500 }}>
+          <Fade in={openLogin}>
+            <LoginBox>
+              <Typography variant='h4' color='white'>
+                Sign In
+              </Typography>
+              <Box component='form' noValidate autoComplete='new-password' sx={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                <LoginTextField label='Email' variant='outlined' onChange={(e) => setLoginEmail(e.target.value)}
+                  InputLabelProps={{ style: { color: 'white' } }} />
+                <LoginTextField label='Password' variant='outlined' type='password' onChange={(e) => setLoginPassword(e.target.value)}
+                  InputLabelProps={{ style: { color: 'white' } }} />
+              </Box>
+              <Button variant='contained' color='inherit' startIcon={<LoginRoundedIcon />} onClick={() => { handleLogin(); toggleLoginWindow(); }}
+                sx={{ height: 52, fontSize: 18, textTransform: 'none' }}>
+                Login
+              </Button>
+              <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end ' }}>
+                <Button onClick={() => { toggleLoginWindow(); toggleRegistration(); }} sx={{ fontSize: 15, color: '#03a9f4', textTransform: 'none' }}>
+                  Create an Account
                 </Button>
-              </>
-              :
-              <>
-                <IconButton size='large' color='inherit' onClick={logger}>
-                  <Badge badgeContent={11} color='error'>
-                    <VpnKeyRoundedIcon fontSize='inherit' />
-                  </Badge>
-                </IconButton>
-                <IconButton size='large' aria-label='mail' color='inherit'>
-                  <Badge badgeContent={20} color='error'>
-                    <MailIcon fontSize='inherit' />
-                  </Badge>
-                </IconButton>
-                <IconButton size='large' aria-label='notification' color='inherit'>
-                  <Badge badgeContent={32} color='error'>
-                    <NotificationsIcon fontSize='inherit' />
-                  </Badge>
-                </IconButton>
-                {/* Account Menu */}
-                <Tooltip title='Account Settings'>
-                  <IconButton onClick={toggleAccountMenu} size="small"
-                    aria-controls={openAccountMenu ? 'account-menu' : undefined}
-                    aria-haspopup="true"
-                    aria-expanded={openAccountMenu ? 'true' : undefined}
-                    sx={{ ml: 0.5, mr: 2 }}>
-                    <Avatar sx={{ width: 28, height: 28 }} />
-                  </IconButton>
-                </Tooltip>
-                <Menu
-                  anchorEl={anchorEl}
-                  id='account-menu'
-                  open={openAccountMenu}
-                  onClose={closeAccountMenu}
-                  transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-                  anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-                  PaperProps={{
-                    elevation: 0,
-                    sx: {
-                      overflow: 'visible',
-                      filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
-                      mt: 1.5,
-                      '& .MuiAvatar-root': {
-                        width: 32, height: 32, ml: -0.5, mr: 2,
-                      },
-                      '&:before': {
-                        content: '""', display: 'block', position: 'absolute',
-                        top: 0, right: 14, width: 10, height: 10,
-                        bgcolor: 'background.paper', transform: 'translateY(-50%) rotate(45deg)',
-                        zIndex: 0,
-                      },
-                    },
-                  }}>
-                  <MenuItem onClick={() => {closeAccountMenu(); navigate('profile/')}}>
-                    <Avatar /> Profile
-                  </MenuItem>
-                  <Divider />
-                  <MenuItem onClick={closeAccountMenu}>
-                    <ListItemIcon sx={{ mr: 1.5 }}>
-                      <Badge color='error' badgeContent={125}>
-                        <FavoriteRoundedIcon />
+              </Box>
+            </LoginBox>
+          </Fade>
+        </Modal>
+        {/* Registration Form */}
+        <Modal open={openRegistration} onClose={toggleRegistration} aria-labelledby='registration' aria-describedby='registration-page'
+          BackdropComponent={Backdrop} BackdropProps={{ timeout: 500 }} >
+          <Fade in={openRegistration}>
+            <SignUpBox>
+              <Typography variant='h4' color='white'>
+                Sign Up
+              </Typography>
+              <Box component='form' noValidate sx={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                <LoginTextField name='email' label='Email' variant='outlined'
+                  helperText={email.length > 0 ? emailError : ''} error={email.length > 0 && emailError.length > 0 ? true : false}
+                  onChange={e => setEmail(e.target.value)} InputLabelProps={{ style: { color: 'white' } }} />
+                <LoginTextField name='username' label='User ID' variant='outlined'
+                  helperText={username.length > 0 ? usernameError : ''} error={username.length > 0 && usernameError.length > 0 ? true : false}
+                  onChange={e => setUsername(e.target.value)} InputLabelProps={{ style: { color: 'white' } }} />
+                <LoginTextField name='name' label='Name' variant='outlined'
+                  onChange={e => setName(e.target.value)} InputLabelProps={{ style: { color: 'white' } }} />
+                <LoginTextField name='password1' label='Password' variant='outlined' type='password'
+                  helperText={password1.length > 0 ? passwordError : ''} error={password1.length > 0 && passwordError.length > 0 ? true : false}
+                  onChange={e => setPassword1(e.target.value)} InputLabelProps={{ style: { color: 'white' } }} />
+                <LoginTextField name='password2' label='Confirm Password' variant='outlined' type='password'
+                  helperText={password2.length > 0 ? matchError : ''} error={password2.length > 0 && matchError.length > 0 ? true : false}
+                  onChange={e => setPassword2(e.target.value)} InputLabelProps={{ style: { color: 'white' } }} />
+              </Box>
+              <Button variant='contained' color='inherit' disabled={isError ? true : false} startIcon={<VpnKeyRoundedIcon />}
+                onClick={() => { handleRegistration(); toggleRegistration(); }}
+                sx={{ height: 52, fontSize: 18, textTransform: 'none' }}>
+                Register
+              </Button>
+              <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end ' }}>
+                <Button onClick={() => { toggleLoginWindow(); toggleRegistration(); }}
+                  sx={{ fontSize: 15, color: '#03a9f4', textTransform: 'none' }}>
+                  Sign In
+                </Button>
+              </Box>
+            </SignUpBox>
+          </Fade>
+        </Modal>
+        {/* App Bar */}
+        <Box>
+          <AppBar open={open} sx={{ bgcolor: '#263238' }}>
+            <Toolbar position='sticky'>
+              <IconButton aria-label='open drawer' onClick={toggleDrawer} edge='start'
+                sx={{ color: 'inherit', mr: 6, ...(open && { display: 'none' }) }}>
+                <MenuIcon />
+              </IconButton>
+              <Typography sx={{ display: { xs: 'none', sm: 'block' } }}>
+                <Link to='/' style={{ fontSize: 22 }}>
+                  J - Travel
+                </Link>
+              </Typography>
+              <Typography sx={{ flex: 1 }}>
+              </Typography>
+              {!auth?.accessToken
+                ? (
+                  <>
+                    <Button color='primary' variant='contained' onClick={toggleLoginWindow} startIcon={<VpnKeyRoundedIcon />}
+                      sx={{ textTransform: 'none', fontSize: 14 }}>
+                      Login
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <IconButton size='large' color='inherit' onClick={logger}>
+                      <Badge badgeContent={11} color='error'>
+                        <VpnKeyRoundedIcon fontSize='inherit' />
                       </Badge>
-                    </ListItemIcon>
-                    Liked Posts
-                  </MenuItem>
-                  <MenuItem onClick={closeAccountMenu}>
-                    <ListItemIcon sx={{ mr: 1.5 }}>
-                      <Badge color='error' badgeContent={17}>
-                        <BookmarkRoundedIcon />
+                    </IconButton>
+                    <IconButton size='large' aria-label='mail' color='inherit'>
+                      <Badge badgeContent={20} color='error'>
+                        <MailIcon fontSize='inherit' />
                       </Badge>
-                    </ListItemIcon>
-                    Saved
-                  </MenuItem>
-                  <Divider />
-                  <MenuItem onClick={closeAccountMenu}>
-                    <ListItemIcon sx={{ mr: 1.5 }}>
-                      <Settings />
-                    </ListItemIcon>
-                    Settings
-                  </MenuItem>
-                  <MenuItem onClick={closeAccountMenu}>
-                    <ListItemIcon sx={{ mr: 1.5 }}>
-                      <AnnouncementIcon />
-                    </ListItemIcon>
-                    Report
-                  </MenuItem>
-                  <Divider />
-                  <MenuItem>
-                    <FormControlLabel
-                      control={<MaterialUISwitch 
-                      onChange={() => setAppTheme(appTheme === 'light' ? 'dark' : 'light')}
-                      checked={appTheme === 'light' ? false : true} />}
-                      label={appTheme === 'light' ? 'Light Theme' : 'Dark Theme'} />
-                  </MenuItem>
-                  <Divider />
-                  <MenuItem onClick={() => {handleLogout(); closeAccountMenu();}}>
-                    <ListItemIcon sx={{ mr: 1.5 }}>
-                      <Logout />
-                    </ListItemIcon>
-                    Logout
-                  </MenuItem>
-                </Menu>
-              </>
-            }
-          </Toolbar>
-        </AppBar>
-        {/* Drawer */}
-        <Drawer sx={{ width: drawerWidth, flexShrink: 0, '& .MuiDrawer-paper': { width: drawerWidth, boxSizing: 'border-box' } }}
-          onBackdropClick={toggleDrawer} variant='temporary' anchor='left' open={open}>
-          <DrawerHeader>
-            <IconButton onClick={toggleDrawer}>
-              {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-            </IconButton>
-          </DrawerHeader>
-          <Divider />
-          <List>
-            {WebIcon.map((item, index) => {
-              return (
-                <Link to='home/' key={index}>
-                  <ListItemButton sx={{ minHeight: 48, justifyContent: open ? 'initial' : 'center', px: 2.5, }}>
+                    </IconButton>
+                    <IconButton size='large' aria-label='notification' color='inherit'>
+                      <Badge badgeContent={32} color='error'>
+                        <NotificationsIcon fontSize='inherit' />
+                      </Badge>
+                    </IconButton>
+                    {/* Account Menu */}
+                    <Tooltip title='Account Settings'>
+                      <IconButton onClick={toggleAccountMenu} size="small"
+                        aria-controls={openAccountMenu ? 'account-menu' : undefined}
+                        aria-haspopup="true"
+                        aria-expanded={openAccountMenu ? 'true' : undefined}
+                        sx={{ ml: 0.5, mr: 2 }}>
+                        <Avatar src={user?.profile_image} aria-label={user?.username}
+                          sx={{ width: 28, height: 28 }} />
+                      </IconButton>
+                    </Tooltip>
+                    <Menu
+                      anchorEl={anchorEl}
+                      id='account-menu'
+                      open={openAccountMenu}
+                      onClose={closeAccountMenu}
+                      transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+                      anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+                      PaperProps={{
+                        elevation: 0,
+                        sx: {
+                          overflow: 'visible',
+                          filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+                          mt: 1.5,
+                          '& .MuiAvatar-root': {
+                            width: 32, height: 32, ml: -0.5, mr: 2,
+                          },
+                          '&:before': {
+                            content: '""', display: 'block', position: 'absolute',
+                            top: 0, right: 14, width: 10, height: 10,
+                            bgcolor: 'background.paper', transform: 'translateY(-50%) rotate(45deg)',
+                            zIndex: 0,
+                          },
+                        },
+                      }}>
+                      <MenuItem onClick={() => { closeAccountMenu(); navigate('profile/') }}>
+                        <Avatar src={user?.profile_image} aria-label={user?.username} /> Profile
+                      </MenuItem>
+                      <Divider />
+                      <MenuItem onClick={closeAccountMenu}>
+                        <ListItemIcon sx={{ mr: 1.5 }}>
+                          <Badge color='error' badgeContent={125}>
+                            <FavoriteRoundedIcon />
+                          </Badge>
+                        </ListItemIcon>
+                        Liked Posts
+                      </MenuItem>
+                      <MenuItem onClick={closeAccountMenu}>
+                        <ListItemIcon sx={{ mr: 1.5 }}>
+                          <Badge color='error' badgeContent={17}>
+                            <BookmarkRoundedIcon />
+                          </Badge>
+                        </ListItemIcon>
+                        Saved
+                      </MenuItem>
+                      <Divider />
+                      <MenuItem onClick={closeAccountMenu}>
+                        <ListItemIcon sx={{ mr: 1.5 }}>
+                          <Settings />
+                        </ListItemIcon>
+                        Settings
+                      </MenuItem>
+                      <MenuItem onClick={closeAccountMenu}>
+                        <ListItemIcon sx={{ mr: 1.5 }}>
+                          <AnnouncementIcon />
+                        </ListItemIcon>
+                        Report
+                      </MenuItem>
+                      <Divider />
+                      <MenuItem>
+                        <FormControlLabel
+                          control={<MaterialUISwitch
+                            onChange={() => setAppTheme(appTheme === 'light' ? 'dark' : 'light')}
+                            checked={appTheme === 'light' ? false : true} />}
+                          label={appTheme === 'light' ? 'Light Theme' : 'Dark Theme'} />
+                      </MenuItem>
+                      <Divider />
+                      <MenuItem onClick={() => { handleLogout(); closeAccountMenu(); }}>
+                        <ListItemIcon sx={{ mr: 1.5 }}>
+                          <Logout />
+                        </ListItemIcon>
+                        Logout
+                      </MenuItem>
+                    </Menu>
+                  </>
+                )
+              }
+            </Toolbar>
+          </AppBar>
+          {/* Drawer */}
+          <Drawer sx={{ width: drawerWidth, flexShrink: 0, '& .MuiDrawer-paper': { width: drawerWidth, boxSizing: 'border-box' } }}
+            onBackdropClick={toggleDrawer} variant='temporary' anchor='left' open={open}>
+            <DrawerHeader>
+              <IconButton onClick={toggleDrawer}>
+                {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+              </IconButton>
+            </DrawerHeader>
+            <Divider />
+            <List>
+              {WebIcon.map((item, index) => {
+                return (
+                  <Link to='home/' key={index}>
+                    <ListItemButton sx={{ minHeight: 48, justifyContent: open ? 'initial' : 'center', px: 2.5, }}>
+                      <ListItemIcon sx={{ minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center' }}>
+                        {item.icon}
+                      </ListItemIcon>
+                      <ListItemText primary={item.title} sx={{ opacity: open ? 1 : 0 }} />
+                    </ListItemButton>
+                  </Link>
+                )
+              })}
+            </List>
+            <Divider />
+            <List>
+              {UserIcon.map((item, index) => {
+                return (
+                  <ListItemButton key={index}
+                    sx={{ minHeight: 48, justifyContent: open ? 'initial' : 'center', px: 2.5 }}>
                     <ListItemIcon sx={{ minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center' }}>
                       {item.icon}
                     </ListItemIcon>
                     <ListItemText primary={item.title} sx={{ opacity: open ? 1 : 0 }} />
                   </ListItemButton>
-                </Link>
-              )
-            })}
-          </List>
-          <Divider />
-          <List>
-            {UserIcon.map((item, index) => {
-              return (
-                <ListItemButton key={index}
-                  sx={{ minHeight: 48, justifyContent: open ? 'initial' : 'center', px: 2.5 }}>
-                  <ListItemIcon sx={{ minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center' }}>
-                    {item.icon}
-                  </ListItemIcon>
-                  <ListItemText primary={item.title} sx={{ opacity: open ? 1 : 0 }} />
-                </ListItemButton>
-              )
-            })}
-          </List>
-          <Divider />
-          <List>
-            {FunctionIcon.map((item, index) => {
-              return (
-                <ListItemButton key={index}
-                  sx={{ minHeight: 48, justifyContent: open ? 'initial' : 'center', px: 2.5 }}>
-                  <ListItemIcon sx={{ minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center' }}>
-                    {item.icon}
-                  </ListItemIcon>
-                  <ListItemText primary={item.title} sx={{ opacity: open ? 1 : 0 }} />
-                </ListItemButton>
-              )
-            })}
-          </List>
-        </Drawer>
+                )
+              })}
+            </List>
+            <Divider />
+            <List>
+              {FunctionIcon.map((item, index) => {
+                return (
+                  <ListItemButton key={index}
+                    sx={{ minHeight: 48, justifyContent: open ? 'initial' : 'center', px: 2.5 }}>
+                    <ListItemIcon sx={{ minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center' }}>
+                      {item.icon}
+                    </ListItemIcon>
+                    <ListItemText primary={item.title} sx={{ opacity: open ? 1 : 0 }} />
+                  </ListItemButton>
+                )
+              })}
+            </List>
+          </Drawer>
+        </Box>
+        {/* Registration Alert */}
+        <Snackbar open={registerAlert} autoHideDuration={5000} onClose={closeRegisterAlert}>
+          <Alert severity='success' onClose={closeRegisterAlert}
+            sx={{ bgcolor: '#1b5e20', color: 'white', width: '100%' }}>
+            You've Successfully Registered your Account
+          </Alert>
+        </Snackbar>
+        <Snackbar open={registerFailedAlert} autoHideDuration={5000} onClose={closeRegisterFailedAlert}>
+          <Alert severity='error' onClose={closeRegisterFailedAlert}
+            sx={{ bgcolor: '#b71c1c', color: 'white', width: '100%' }}>
+            Registration Failed. User ID has been Taken
+          </Alert>
+        </Snackbar>
+        {/* Login Alert */}
+        <Snackbar open={loginAlert} autoHideDuration={5000} onClose={closeLoginAlert}>
+          <Alert severity='success' onClose={closeLoginAlert}
+            sx={{ bgcolor: '#1b5e20', color: 'white', width: '100%' }}>
+            You've Successfully Login to Your Account
+          </Alert>
+        </Snackbar>
+        <Snackbar open={loginFailedAlert} autoHideDuration={5000} onClose={closeLoginFailedAlert}>
+          <Alert severity='error' onClose={closeLoginFailedAlert}
+            sx={{ bgcolor: '#b71c1c', color: 'white', width: '100%' }}>
+            Login Failed. Incorrect Email or Password
+          </Alert>
+        </Snackbar>
+        <Snackbar open={requireLoginAlert} autoHideDuration={3000} onClose={closeRequireLoginAlert}>
+          <Alert severity='error' onClose={closeRequireLoginAlert}
+            sx={{ bgcolor: '#b71c1c', color: 'white', width: '100%' }}>
+            Login Required
+          </Alert>
+        </Snackbar>
       </Box>
-      {/* Registration Alert */}
-      <Snackbar open={registerAlert} autoHideDuration={5000} onClose={closeRegisterAlert}>
-        <Alert severity='success' onClose={closeRegisterAlert}
-          sx={{ bgcolor: '#1b5e20', color: 'white', width: '100%' }}>
-          You've Successfully Registered your Account
-        </Alert>
-      </Snackbar>
-      <Snackbar open={registerFailedAlert} autoHideDuration={5000} onClose={closeRegisterFailedAlert}>
-        <Alert severity='error' onClose={closeRegisterFailedAlert}
-          sx={{ bgcolor: '#b71c1c', color: 'white', width: '100%' }}>
-          Registration Failed. User ID has been Taken
-        </Alert>
-      </Snackbar>
-      {/* Login Alert */}
-      <Snackbar open={loginAlert} autoHideDuration={5000} onClose={closeLoginAlert}>
-        <Alert severity='success' onClose={closeLoginAlert}
-          sx={{ bgcolor: '#1b5e20', color: 'white', width: '100%' }}>
-          You've Successfully Login to Your Account
-        </Alert>
-      </Snackbar>
-      <Snackbar open={loginFailedAlert} autoHideDuration={5000} onClose={closeLoginFailedAlert}>
-        <Alert severity='error' onClose={closeLoginFailedAlert}
-          sx={{ bgcolor: '#b71c1c', color: 'white', width: '100%' }}>
-          Login Failed. Incorrect Email or Password
-        </Alert>
-      </Snackbar>
-      <Snackbar open={requireLoginAlert} autoHideDuration={3000} onClose={closeRequireLoginAlert}>
-        <Alert severity='error' onClose={closeRequireLoginAlert}
-          sx={{ bgcolor: '#b71c1c', color: 'white', width: '100%' }}>
-          Login Required
-        </Alert>
-      </Snackbar>
-    </Box>
+      {/* )}; */}
+    </>
   );
 };
 

@@ -27,14 +27,13 @@ const StyledBox = styled(Box)({
 function Info({ auth }) {
 
   const { email, username, name, profile_image, about, start_date, last_login } = auth;
-  var joinOptions = { year: 'numeric', month: 'long', day: 'numeric' }
-  var loginOptions = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' }
+  const joinOptions = { year: 'numeric', month: 'long', day: 'numeric' }
+  const loginOptions = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' }
 
   return (
     <StyledBox paddingTop={16} paddingBottom={2}>
       <Box sx={{ display: 'flex', justifyContent: 'start', width: 920 }}>
-        <Avatar src={profile_image}
-          sx={{ height: 180, width: 180, ml: 2, mr: 4 }} />
+        <Avatar src={profile_image} sx={{ height: 180, width: 180, ml: 2, mr: 4 }} />
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, mr: 2 }}>
           <Typography variant='h6' sx={{ fontSize: 40, width: 250, mb: 1 }}>{username}<IconButton>
             <ManageAccountsRoundedIcon fontSize='large' /></IconButton></Typography>
@@ -45,7 +44,7 @@ function Info({ auth }) {
           <Typography variant='caption' sx={{ display: 'flex', alignItems: 'center' }}>
             <EventNoteRoundedIcon fontSize='small' sx={{ mr: 1 }} />Since @{new Date(start_date).toLocaleString('en-US', joinOptions)}</Typography>
           <Typography variant='caption' sx={{ display: 'flex', alignItems: 'center', color: '#0091ea' }}>
-            <VpnKeyRoundedIcon fontSize='small' sx={{ mr: 1 }} />Last Login @{new Date(last_login).toLocaleString('en-US',loginOptions)}</Typography>
+            <VpnKeyRoundedIcon fontSize='small' sx={{ mr: 1 }} />Last Login @{new Date(last_login).toLocaleString('en-US', loginOptions)}</Typography>
         </Box>
         <Divider orientation='vertical' sx={{ height: 'auto' }} />
         <Box sx={{ display: 'flex' }}>

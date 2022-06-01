@@ -22,17 +22,16 @@ class AccountAdminConfig(UserAdmin):
             {
                 'classes': ('wide',),
                 'fields': (
-                    'id',
                     'email',
                     'username',
                     'name',
                     'profile_image',
                     'about',
-                    'password',
+                    'password1',
+                    'password2',
                     'is_staff',
                     'is_superuser',
                     'is_active',
-                    'last_login'
                 ),
             },
         ),
