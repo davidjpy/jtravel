@@ -46,7 +46,6 @@ import { WebIcon, UserIcon, FunctionIcon } from './SidebarButtons';
 import useValidation from '../../hooks/useValidation';
 import useAuth from '../../hooks/useAuth';
 import axiosInstance from '../../utils/Axios';
-import useGetUser from '../../hooks/useGetUser';
 
 const drawerWidth = 180;
 
@@ -172,7 +171,6 @@ function Sidebar({ appTheme, setAppTheme }) {
   const theme = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
-  const getUser = useGetUser();
 
   const from = location.state?.from?.pathname || '/';
   const register_URL = 'account/auth/register/';
@@ -198,7 +196,7 @@ function Sidebar({ appTheme, setAppTheme }) {
   const openAccountMenu = Boolean(anchorEl);
   const { emailError, usernameError, passwordError, matchError, isError }
     = useValidation(email, username, password1, password2);
-  const { auth, setAuth, requireLoginAlert, setRequireLoginAlert } = useAuth();
+  const { auth, setAuth, requireLoginAlert, setRequireLoginAlert, profileThread, profileThreadCounter } = useAuth();
   const { user } = auth;
 
   const toggleLoginWindow = () => {
@@ -328,7 +326,7 @@ function Sidebar({ appTheme, setAppTheme }) {
   };
 
   const logger = () => {
-    console.log(auth)
+    console.log(auth, profileThread, profileThreadCounter)
   };
 
   return (
@@ -475,7 +473,8 @@ function Sidebar({ appTheme, setAppTheme }) {
                             zIndex: 0,
                           },
                         },
-                      }}>
+                      }}
+                    >
                       <MenuItem onClick={() => { closeAccountMenu(); navigate('profile/') }}>
                         <Avatar src={user?.profile_image} aria-label={user?.username} /> Profile
                       </MenuItem>

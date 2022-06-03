@@ -11,11 +11,12 @@ function ProfilePage() {
 
   const getUser = useGetUser();
   const getThread = useProfileThread();
-  const { auth, profileThread } = useAuth();
+  const { auth, profileThread, profileThreadCounter, setProfileThreadCounter } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
+  const [tiggerer, setTiggerer] = useState(0)
 
   useEffect(() => {
-    const verifyUser = async () => {
+    const verifyProfile = async () => {
       try {
         await getUser();
         await getThread();
@@ -27,9 +28,20 @@ function ProfilePage() {
         setIsLoading(false);
       };
     };
-    verifyUser();
+    verifyProfile();
   }, []);
 
+  useEffect(() => {
+    const verifyProfile = async () => {
+      try {
+        await getThread();
+      }
+      catch (err) {
+        console.error(err);
+      };
+    };
+    verifyProfile();
+  }, [profileThreadCounter, tiggerer]);
 
   return (
     <>
@@ -39,7 +51,12 @@ function ProfilePage() {
         <Box flex={2} bgcolor={'background.default'} color={'text.primary'}
           sx={{ display: 'flex', flexDirection: 'column' }}>
           <Info auth={auth.user} />
-          <Media profileThread={profileThread.profilethread} />
+          <Media 
+            profileThread={profileThread.profilethread}
+            profileThreadCounter={profileThreadCounter}
+            setProfileThreadCounter={setProfileThreadCounter}
+            tiggerer={tiggerer}
+            setTiggerer={setTiggerer} />
         </Box>
       )}
     </>

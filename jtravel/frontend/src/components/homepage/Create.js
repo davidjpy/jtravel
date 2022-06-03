@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   Tooltip,
   Fab,
@@ -75,11 +75,12 @@ const LoginTextField = styled(TextField)({
   }
 });
 
-function Create({ auth, openCreate, setOpenCreate }) {
+function Create({ auth, setThreadCounter }) {
 
   const { username, profile_image } = auth;
   const [content, setContent] = useState('');
   const [image, setImage] = useState([]);
+  const [openCreate, setOpenCreate] = useState(false);
 
   const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' }
   const currentDate = new Date().toLocaleString('en-US', options)
@@ -92,6 +93,10 @@ function Create({ auth, openCreate, setOpenCreate }) {
     setImage(e.target.files[0]);
   };
 
+  const updateThreadCounter = (e) => {
+    setThreadCounter(e + 1)
+  };
+
   const handleCreateThread = async () => {
     try {
       const formData = new FormData();
@@ -100,13 +105,13 @@ function Create({ auth, openCreate, setOpenCreate }) {
       formData.append('image', image);
       formData.append('content', content);
       formData.append('created', moment().format('YYYY-MM-DDThh:mm:ss'));
-
       await axiosInstance.post(create_URL, formData, {
         headers: 
         {
           'content-type': 'multipart/form-data'
         }
       });
+      updateThreadCounter();
     }
     catch (err) {
       console.error(err);

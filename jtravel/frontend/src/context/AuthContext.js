@@ -7,11 +7,13 @@ export const AuthProvider = ({ children }) => {
   const [auth, setAuth] = useState({});
   const [profileThread, setProfileThread] = useState();
   const [requireLoginAlert, setRequireLoginAlert] = useState(false);
+  const [profileThreadCounter, setProfileThreadCounter] = useState(0)
 
   return (
     <AuthContext.Provider value={{ auth, setAuth, 
                                    requireLoginAlert, setRequireLoginAlert,
-                                   profileThread, setProfileThread }}>
+                                   profileThread, setProfileThread,
+                                   profileThreadCounter, setProfileThreadCounter }}>
       {children}
     </AuthContext.Provider>
   );

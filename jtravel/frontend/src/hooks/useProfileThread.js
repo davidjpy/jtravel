@@ -3,7 +3,7 @@ import axiosInstance from '../utils/Axios';
 
 const useProfileThread = () => {
 
-  const { setProfileThread } = useAuth();
+  const { setProfileThread, setProfileThreadCounter } = useAuth();
 
   const getThread = async () => {
 
@@ -18,7 +18,8 @@ const useProfileThread = () => {
       return {
         ...prev, profilethread: response.data
       };
-    })
+    });
+    setProfileThreadCounter(response.data.length);
     return response.data;
   };
   return getThread;

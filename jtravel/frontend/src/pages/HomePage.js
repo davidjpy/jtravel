@@ -7,13 +7,17 @@ import Suggest from '../components/homepage/Suggest';
 import Create from '../components/homepage/Create';
 import useAuth from '../hooks/useAuth';
 import useGetUser from '../hooks/useGetUser';
+import axiosInstance from '../utils/Axios';
+
+const Thread_Url = 'api/public/thread/'
 
 function HomePage() {
 
   const getUser = useGetUser();
   const { auth } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
-  const [openCreate, setOpenCreate] = useState(false);
+  const [thread, setThread] = useState([]);
+  const [threadCounter, setThreadCounter] = useState(0);
 
   useEffect(() => {
     const verifyUser = async () => {
@@ -30,6 +34,19 @@ function HomePage() {
     verifyUser();
   }, []);
 
+  useEffect(() => {
+    const verifyContent = async () => {
+      try {
+        const response = await axiosInstance.get(Thread_Url);
+        setThread(response.data);
+      }
+      catch (err) {
+        console.error(err);
+      };
+    };
+    verifyContent();
+  }, [threadCounter]);
+
   return (
     <>
       {isLoading ? (
@@ -38,10 +55,10 @@ function HomePage() {
         <Box bgcolor={'background.default'} color={'text.primary'}>
           <Stack direction='row' justifyContent='space-between'>
             <Suggest />
-            <Thread openCreate={openCreate} />
+            <Thread thread={thread} />
             <Social />
           </Stack>
-          <Create auth={auth.user} openCreate={openCreate} setOpenCreate={setOpenCreate} />
+          <Create auth={auth.user} setThreadCounter={setThreadCounter} />
         </Box>
       )};
     </>
