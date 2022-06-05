@@ -8,7 +8,7 @@ class ThreadView(generics.ListAPIView):
     serializer_class = ThreadSerializer
     
     def get_queryset(self):
-        username = self.request.user.username
+        username = self.request.user.id
         return Thread.objects.filter(username=username)
     
 class ThreadViewSets(viewsets.ModelViewSet):

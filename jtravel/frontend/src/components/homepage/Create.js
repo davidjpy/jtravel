@@ -11,6 +11,8 @@ import {
   Box,
   Button,
   Avatar,
+  Snackbar,
+  Alert
 } from '@mui/material'
 import moment from 'moment'
 import { styled } from '@mui/material/styles';
@@ -75,15 +77,23 @@ const LoginTextField = styled(TextField)({
   }
 });
 
-function Create({ auth, setThreadCounter }) {
+function Create({ auth, threadCounter, setThreadCounter }) {
 
-  const { username, profile_image } = auth;
+  const { id, username, profile_image } = auth;
+  const [createAlert, setCreateAlert] = useState(false);
   const [content, setContent] = useState('');
   const [image, setImage] = useState([]);
   const [openCreate, setOpenCreate] = useState(false);
 
-  const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' }
-  const currentDate = new Date().toLocaleString('en-US', options)
+  const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
+  const currentDate = new Date().toLocaleString('en-US', options);
+
+  const closecreateAlert = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    };
+    setCreateAlert(false);
+  };
 
   const toggleCreateWindow = () => {
     setOpenCreate(!openCreate);
@@ -100,7 +110,7 @@ function Create({ auth, setThreadCounter }) {
   const handleCreateThread = async () => {
     try {
       const formData = new FormData();
-      formData.append('username', username);
+      formData.append('username', id);
       formData.append('alt', content);
       formData.append('image', image);
       formData.append('content', content);
@@ -111,7 +121,8 @@ function Create({ auth, setThreadCounter }) {
           'content-type': 'multipart/form-data'
         }
       });
-      updateThreadCounter();
+      updateThreadCounter(threadCounter);
+      setCreateAlert(true);
     }
     catch (err) {
       console.error(err);
@@ -165,6 +176,12 @@ function Create({ auth, setThreadCounter }) {
           </CreateBox>
         </Fade>
       </Modal>
+      <Snackbar open={createAlert} autoHideDuration={2000} onClose={closecreateAlert}>
+        <Alert onClose={closecreateAlert} severity='success' 
+          sx={{ bgcolor: '#1b5e20', color: 'white', width: '100%' }}>
+          You've Successfully Created a New Thread
+        </Alert>
+      </Snackbar>
     </>
   );
 };

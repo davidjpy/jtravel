@@ -8,8 +8,6 @@ import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
 import BookmarkBorderOutlinedIcon from '@mui/icons-material/BookmarkBorderOutlined';
 import BookmarkRoundedIcon from '@mui/icons-material/BookmarkRounded';
 
-import axiosInstance from '../../utils/Axios';
-
 // import faker from  'faker';
 
 function Thread({ thread }) {
@@ -25,7 +23,7 @@ function Thread({ thread }) {
 
 export default Thread;
 
-function ThreadItem({ username, profile_image, content, image, created }) {
+function ThreadItem({ username, username_display, profile_image, content, image, created }) {
 
   const [like, setLike] = useState(false);
   const [likeAlert, setLikeAlert] = useState(false);
@@ -83,7 +81,7 @@ function ThreadItem({ username, profile_image, content, image, created }) {
         avatar={<Avatar src={profile_image} aria-label={username}
           sx={{ height: 50, width: 50 }} />}
         action={<IconButton aria-label='settings'><MoreVertIcon /></IconButton>}
-        title={username}
+        title={username_display}
         subheader={created} />
       <CardMedia component='img' image={image} height='auto' />
       <CardContent>
@@ -108,22 +106,22 @@ function ThreadItem({ username, profile_image, content, image, created }) {
       </CardActions>
       <Snackbar open={likeAlert} autoHideDuration={2000} onClose={closeLikeAlert}>
         <Alert onClose={closeLikeAlert} sx={{ bgcolor: '#b71c1c', width: 300 }}>
-          You've Liked this Post
+          You've Liked this Thread
         </Alert>
       </Snackbar>
       <Snackbar open={unlikeAlert} autoHideDuration={2000} onClose={closeUnlikeAlert}>
         <Alert onClose={closeUnlikeAlert} sx={{ bgcolor: '#795548', width: 300 }}>
-          You've Unliked this Post
+          You've Unliked this Thread
         </Alert>
       </Snackbar>
       <Snackbar open={bookmarkAlert} autoHideDuration={2000} onClose={closeBookmarkAlert}>
         <Alert onClose={closeBookmarkAlert} sx={{ bgcolor: '#37474f', width: 300 }}>
-          You've Bookmarked this Post
+          You've Bookmarked this Thread
         </Alert>
       </Snackbar>
       <Snackbar open={unBookmarkAlert} autoHideDuration={2000} onClose={closeUnBookmarkAlert}>
         <Alert onClose={closeUnBookmarkAlert} sx={{ bgcolor: '#795548', width: 300 }}>
-          You've Unbookmarked this Post
+          You've Unbookmarked this Thread
         </Alert>
       </Snackbar>
     </Card>

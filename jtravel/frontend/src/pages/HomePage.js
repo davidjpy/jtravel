@@ -58,7 +58,7 @@ function HomePage() {
             <Thread thread={thread} />
             <Social />
           </Stack>
-          <Create auth={auth.user} setThreadCounter={setThreadCounter} />
+          <Create auth={auth.user} threadCounter={threadCounter} setThreadCounter={setThreadCounter} />
         </Box>
       )};
     </>

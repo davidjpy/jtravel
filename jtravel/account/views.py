@@ -54,12 +54,16 @@ class RefreshViewSet(viewsets.ViewSet, TokenRefreshView):
         return Response(serializer.validated_data, status=status.HTTP_200_OK)        
 
 class UserViewSet(viewsets.ModelViewSet):
-    queryset = Account.objects.none()
     serializer_class = UserSerializer 
-    permission_classes = (IsAuthenticated,)
+    queryset = Account.objects.all()
+    permission_classes = (AllowAny,)
+
+    # serializer_class = UserSerializer 
+    # queryset = Account.objects.none()
+    # permission_classes = (IsAuthenticated,)
     
-    def get_queryset(self): 
-        return Account.objects.filter(id=self.request.user.id)
+    # def get_queryset(self): 
+    #     return Account.objects.filter(id=self.request.user.id)
     
 class BlacklistTokenView(viewsets.ModelViewSet):
     permission_classes = (AllowAny,)

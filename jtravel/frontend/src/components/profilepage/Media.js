@@ -22,6 +22,8 @@ import {
   ListItemIcon,
   TextField,
   Button,
+  Snackbar,
+  Alert
 } from '@mui/material';
 import moment from 'moment'
 import { styled } from '@mui/material/styles';
@@ -74,6 +76,14 @@ const StyledCardContent = styled(CardContent)({
 function Media({ profileThread, profileThreadCounter, setProfileThreadCounter, tiggerer, setTiggerer }) {
 
   const [focus, setFocus] = useState(0);
+  const [deleteAlert, setDeleteAlert] = useState(false);
+
+  const closedeleteAlert = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    };
+    setDeleteAlert(false);
+  };
 
   return (
     <StyledBox paddingTop={2}>
@@ -94,23 +104,38 @@ function Media({ profileThread, profileThreadCounter, setProfileThreadCounter, t
             setProfileThreadCounter={setProfileThreadCounter}
             tiggerer={tiggerer}
             setTiggerer={setTiggerer}
+            setDeleteAlert={setDeleteAlert}
             {...item} />
         ))}
       </ImageList>
+      <Snackbar open={deleteAlert} autoHideDuration={2000} onClose={closedeleteAlert}>
+        <Alert onClose={closedeleteAlert} severity='error'
+          sx={{ bgcolor: '#b71c1c', color: 'white', width: '100%' }}>
+          You've Successfully Deleted this Thread
+        </Alert>
+      </Snackbar>
     </StyledBox>
   );
 };
 
 export default Media;
 
-function ThreadItem({ id, image, alt, username, profile_image, content, created, profileThreadCounter, setProfileThreadCounter, tiggerer, setTiggerer }) {
+function ThreadItem({ id, image, alt, username, username_display, profile_image, content, created, profileThreadCounter, setProfileThreadCounter, tiggerer, setTiggerer, setDeleteAlert }) {
 
   const [hover, setHover] = useState(false);
   const [openThread, setOpenThread] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const [isEditMode, setIsEditMode] = useState(false);
   const [editField, setEditField] = useState(content)
+  const [updateAlert, setUpdateAlert] = useState(false);
   const openActionMenu = Boolean(anchorEl);
+  
+  const closeupdateAlert = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    };
+    setUpdateAlert(false);
+  };
 
   const toggleThreadWindow = () => {
     setOpenThread(!openThread);
@@ -139,8 +164,8 @@ function ThreadItem({ id, image, alt, username, profile_image, content, created,
       formData.append('alt', editField);
       formData.append('content', editField);
       formData.append('created', moment().format('YYYY-MM-DDThh:mm:ss'));
-      await axiosInstance.putForm(`api/public/thread/${id}/`, formData, {
-        headers: 
+      await axiosInstance.put(`api/public/thread/${id}/`, formData, {
+        headers:
         {
           'content-type': 'multipart/form-data'
         }
@@ -154,7 +179,7 @@ function ThreadItem({ id, image, alt, username, profile_image, content, created,
 
   return (
     <>
-      <Modal open={openThread} onClose={() => {toggleThreadWindow(); setIsEditMode(false); }} aria-labelledby='thread-details' aria-describedby='thread-action'
+      <Modal open={openThread} onClose={() => { toggleThreadWindow(); setIsEditMode(false); }} aria-labelledby='thread-details' aria-describedby='thread-action'
         disableAutoFocus closeAfterTransition BackdropComponent={Backdrop} BackdropProps={{ timeout: 500 }}>
         <Fade in={openThread}>
           <ThreadBox>
@@ -163,11 +188,11 @@ function ThreadItem({ id, image, alt, username, profile_image, content, created,
                 titleTypographyProps={{ fontSize: 18 }}
                 avatar={<Avatar src={profile_image}
                   sx={{ height: 45, width: 45 }} />}
-                action={ isEditMode ? null : <IconButton aria-label='actions' onClick={toggleActionMenu} ><MoreVertIcon size="small"
+                action={isEditMode ? null : <IconButton aria-label='actions' onClick={toggleActionMenu} ><MoreVertIcon size="small"
                   aria-controls={openActionMenu ? 'account-menu' : undefined}
                   aria-haspopup="true"
                   aria-expanded={openActionMenu ? 'true' : undefined} /></IconButton>}
-                title={username}
+                title={username_display}
                 subheader={created} />
               <ActionMenu
                 anchorEl={anchorEl}
@@ -177,18 +202,19 @@ function ThreadItem({ id, image, alt, username, profile_image, content, created,
                 profileThreadCounter={profileThreadCounter}
                 setProfileThreadCounter={setProfileThreadCounter}
                 id={id}
-                toggleEditMode={toggleEditMode} />
+                toggleEditMode={toggleEditMode}
+                setDeleteAlert={setDeleteAlert} />
               <CardMedia component='img' image={image} height='auto' />
               {isEditMode ? (
                 <>
                   <StyledCardContent>
-                    <EditTextField name='Edit' label='Edit' variant='outlined' placeholder='Make your changes here......' 
-                       onChange={e => setEditField(e.target.value)} defaultValue={content} multiline rows={3} 
-                       sx={{ width: '100%' }} InputProps={{ style: { fontSize: 14 } }} />
+                    <EditTextField name='Edit' label='Edit' variant='outlined' placeholder='Make your changes here......'
+                      onChange={e => setEditField(e.target.value)} defaultValue={content} multiline rows={3}
+                      sx={{ width: '100%' }} InputProps={{ style: { fontSize: 14 } }} />
                     <CardActions sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'flex-end' }}>
-                      <Button variant='contained' onClick={async () => { await handleThreadUpdate(); toggleEditMode(); }}
+                      <Button variant='contained' onClick={async () => { await handleThreadUpdate(); toggleEditMode(); setUpdateAlert(true); }}
                         startIcon={<SaveIcon />} sx={{ width: 116 }}>Save</Button>
-                      <Button variant='contained' color='inherit' onClick={toggleEditMode} 
+                      <Button variant='contained' color='inherit' onClick={toggleEditMode}
                         startIcon={<CancelRoundedIcon />} sx={{ width: 116 }}>Cancel</Button>
                     </CardActions>
                   </StyledCardContent>
@@ -226,15 +252,22 @@ function ThreadItem({ id, image, alt, username, profile_image, content, created,
           }
         />
       </ImageListItem>
+      <Snackbar open={updateAlert} autoHideDuration={2000} onClose={closeupdateAlert}>
+        <Alert onClose={closeupdateAlert} severity='success' 
+          sx={{ bgcolor: '#1b5e20', color: 'white', width: '100%' }}>
+          You've Successfully Updated this Thread
+        </Alert>
+      </Snackbar>
     </>
   );
 };
 
-function ActionMenu({ id, toggleThreadWindow, anchorEl, openActionMenu, closeActionMenu, setProfileThreadCounter, toggleEditMode }) {
+function ActionMenu({ id, toggleThreadWindow, anchorEl, openActionMenu, closeActionMenu, profileThreadCounter, setProfileThreadCounter, toggleEditMode, setDeleteAlert }) {
 
   const deleteThread = async () => {
     await axiosInstance.delete(`api/public/thread/${id}`);
-    updateProfileThreadCounter();
+    updateProfileThreadCounter(profileThreadCounter);
+    setDeleteAlert(true);
   };
 
   const updateProfileThreadCounter = (e) => {
@@ -242,46 +275,46 @@ function ActionMenu({ id, toggleThreadWindow, anchorEl, openActionMenu, closeAct
   };
 
   return (
-    <Menu
-      anchorEl={anchorEl}
-      id='action-menu'
-      open={openActionMenu}
-      onClose={closeActionMenu}
-      transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-      anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-      PaperProps={{
-        elevation: 0,
-        sx: {
-          overflow: 'visible',
-          filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
-          mt: 1.5,
-          '& .MuiAvatar-root': {
-            width: 32, height: 32, ml: -0.5, mr: 2,
+    <>
+      <Menu
+        anchorEl={anchorEl}
+        id='action-menu'
+        open={openActionMenu}
+        onClose={closeActionMenu}
+        transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+        PaperProps={{
+          elevation: 0,
+          sx: {
+            overflow: 'visible',
+            filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+            mt: 1.5,
+            '& .MuiAvatar-root': {
+              width: 32, height: 32, ml: -0.5, mr: 2,
+            },
+            '&:before': {
+              content: '""', display: 'block', position: 'absolute',
+              top: 0, right: 14, width: 10, height: 10,
+              bgcolor: 'background.paper', transform: 'translateY(-50%) rotate(45deg)',
+              zIndex: 0,
+            },
           },
-          '&:before': {
-            content: '""', display: 'block', position: 'absolute',
-            top: 0, right: 14, width: 10, height: 10,
-            bgcolor: 'background.paper', transform: 'translateY(-50%) rotate(45deg)',
-            zIndex: 0,
-          },
-        },
-      }}>
-      <MenuItem onClick={() => { toggleEditMode(); closeActionMenu(); }}>
-        <ListItemIcon >
-          <CreateRoundedIcon />
-        </ListItemIcon>
-        Edit
-      </MenuItem>
-      <MenuItem onClick={() => { deleteThread(); toggleThreadWindow(); }}>
-        <ListItemIcon>
-          <DeleteRoundedIcon />
-        </ListItemIcon>
-        Delete
-      </MenuItem>
-      <MenuItem>
-        Active
-      </MenuItem>
-    </Menu>
+        }}>
+        <MenuItem onClick={() => { toggleEditMode(); closeActionMenu(); }}
+          sx={{ width: 130 }}>
+          <ListItemIcon >
+            <CreateRoundedIcon />
+          </ListItemIcon>
+          Edit
+        </MenuItem>
+        <MenuItem onClick={async () => { await deleteThread(); toggleThreadWindow(); }}>
+          <ListItemIcon>
+            <DeleteRoundedIcon />
+          </ListItemIcon>
+          Delete
+        </MenuItem>
+      </Menu>
+    </>
   );
 };
 

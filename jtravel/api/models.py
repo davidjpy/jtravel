@@ -15,11 +15,10 @@ class Thread(models.Model):
 
     options = (('active', 'Active'), ('deactivated', 'Deactivated'))
 
-    username = models.ForeignKey(Account, on_delete=models.CASCADE, to_field='username', related_name='user')
+    username = models.ForeignKey(Account, on_delete=models.CASCADE)
     alt = models.TextField(max_length=255, blank=True)
     image = models.ImageField(max_length=255, upload_to=thread_image_path, blank=True)
     content = models.TextField(blank=True)
     created = models.DateTimeField(blank=True, null=True, default=timezone.now)
     status = models.CharField(max_length=11, choices=options, default='active')
-    
     

@@ -189,6 +189,7 @@ function Sidebar({ appTheme, setAppTheme }) {
   const [registerFailedAlert, setRegisterFailedAlert] = useState(false);
   const [loginAlert, setLoginAlert] = useState(false);
   const [loginFailedAlert, setLoginFailedAlert] = useState(false);
+  const [logoutAlert, setLogoutAlert] = useState(false);
   const [loginEmail, setLoginEmail] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
   const [anchorEl, setAnchorEl] = useState(null);
@@ -209,6 +210,13 @@ function Sidebar({ appTheme, setAppTheme }) {
 
   const toggleRegistration = () => {
     setOpenRegistration(!openRegistration);
+  };
+
+  const closeLogoutAlert = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    };
+    setLogoutAlert(false);
   };
 
   const closeRegisterAlert = (event, reason) => {
@@ -308,9 +316,10 @@ function Sidebar({ appTheme, setAppTheme }) {
       });
       localStorage.removeItem('access_token');
       localStorage.removeItem('refresh_token');
-      localStorage.removeItem('user_id')
+      localStorage.removeItem('user_id');
       axiosInstance.defaults.headers['Authorization'] = null;
       setAuth('');
+      setLogoutAlert(true);
     }
     catch (err) {
       console.log(err);
@@ -331,11 +340,7 @@ function Sidebar({ appTheme, setAppTheme }) {
 
   return (
     <>
-      {/* {isLoading ? (
-        <p>Loading...</p>
-      ) : ( */}
       <Box>
-        {/* Login Form */}
         <Modal aria-labelledby='login' aria-describedby='login-page' open={openLogin} onClose={toggleLoginWindow}
           closeAfterTransition BackdropComponent={Backdrop} BackdropProps={{ timeout: 500 }}>
           <Fade in={openLogin}>
@@ -361,7 +366,6 @@ function Sidebar({ appTheme, setAppTheme }) {
             </LoginBox>
           </Fade>
         </Modal>
-        {/* Registration Form */}
         <Modal open={openRegistration} onClose={toggleRegistration} aria-labelledby='registration' aria-describedby='registration-page'
           BackdropComponent={Backdrop} BackdropProps={{ timeout: 500 }} >
           <Fade in={openRegistration}>
@@ -399,7 +403,6 @@ function Sidebar({ appTheme, setAppTheme }) {
             </SignUpBox>
           </Fade>
         </Modal>
-        {/* App Bar */}
         <Box>
           <AppBar open={open} sx={{ bgcolor: '#263238' }}>
             <Toolbar position='sticky'>
@@ -439,7 +442,6 @@ function Sidebar({ appTheme, setAppTheme }) {
                         <NotificationsIcon fontSize='inherit' />
                       </Badge>
                     </IconButton>
-                    {/* Account Menu */}
                     <Tooltip title='Account Settings'>
                       <IconButton onClick={toggleAccountMenu} size="small"
                         aria-controls={openAccountMenu ? 'account-menu' : undefined}
@@ -582,7 +584,6 @@ function Sidebar({ appTheme, setAppTheme }) {
             </List>
           </Drawer>
         </Box>
-        {/* Registration Alert */}
         <Snackbar open={registerAlert} autoHideDuration={5000} onClose={closeRegisterAlert}>
           <Alert severity='success' onClose={closeRegisterAlert}
             sx={{ bgcolor: '#1b5e20', color: 'white', width: '100%' }}>
@@ -595,7 +596,6 @@ function Sidebar({ appTheme, setAppTheme }) {
             Registration Failed. User ID has been Taken
           </Alert>
         </Snackbar>
-        {/* Login Alert */}
         <Snackbar open={loginAlert} autoHideDuration={5000} onClose={closeLoginAlert}>
           <Alert severity='success' onClose={closeLoginAlert}
             sx={{ bgcolor: '#1b5e20', color: 'white', width: '100%' }}>
@@ -614,8 +614,13 @@ function Sidebar({ appTheme, setAppTheme }) {
             Login Required
           </Alert>
         </Snackbar>
+        <Snackbar open={logoutAlert} autoHideDuration={5000} onClose={closeLogoutAlert}>
+          <Alert severity='success' onClose={closeLogoutAlert}
+            sx={{ bgcolor: '#1b5e20', color: 'white', width: '100%' }}>
+            You've Successfully Logout Your Account
+          </Alert>
+        </Snackbar>
       </Box>
-      {/* )}; */}
     </>
   );
 };
