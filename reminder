@@ -1,0 +1,4 @@
+def sample_image_path(instance, filename):
+    path = 'samples/sample_%s' % instance.sample_ID
+    format = instance.image_ID + '.jpg'
+    return os.path.join(path, format)
