@@ -1,5 +1,6 @@
 from rest_framework import viewsets, generics
 from rest_framework.permissions import AllowAny, IsAuthenticated
+
 from .serializers import ThreadSerializer
 from .models import Thread
 

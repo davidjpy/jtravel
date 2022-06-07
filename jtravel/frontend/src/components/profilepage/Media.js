@@ -27,9 +27,9 @@ import {
 } from '@mui/material';
 import moment from 'moment'
 import { styled } from '@mui/material/styles';
-import RestoreIcon from '@mui/icons-material/Restore';
+import PhotoLibraryRoundedIcon from '@mui/icons-material/PhotoLibraryRounded';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
+import PhotoAlbumRoundedIcon from '@mui/icons-material/PhotoAlbumRounded';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import CreateRoundedIcon from '@mui/icons-material/CreateRounded';
 import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
@@ -92,9 +92,9 @@ function Media({ profileThread, profileThreadCounter, setProfileThreadCounter, t
         showLabels
         value={focus}
         onChange={(event, newValue) => { setFocus(newValue); }}>
-        <BottomNavigationAction label="Recents" icon={<RestoreIcon />} sx={{ mr: 5 }} />
+        <BottomNavigationAction label="Threads" icon={<PhotoLibraryRoundedIcon />} sx={{ mr: 5 }} />
         <BottomNavigationAction label="Favorites" icon={<FavoriteIcon />} sx={{ mr: 5 }} />
-        <BottomNavigationAction label="Nearby" icon={<LocationOnIcon />} />
+        <BottomNavigationAction label="Bookmarks" icon={<PhotoAlbumRoundedIcon />} />
       </BottomNavigation>
       <ImageList cols={3} rowHeight='auto' sx={{ mt: 2, width: 920, paddingBottom: 5, overflow: 'unset' }}>
         {profileThread.map((item) => (

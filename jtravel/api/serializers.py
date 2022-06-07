@@ -1,6 +1,6 @@
 from rest_framework import serializers
+
 from .models import Thread
-from account.models import Account
 
 class ThreadSerializer(serializers.ModelSerializer):
     

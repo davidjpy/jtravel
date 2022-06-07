@@ -1,15 +1,13 @@
 from django.db import models
 from django.utils import timezone
-from account.models import Account
 import os
 
+from account.models import Account
+
 def thread_image_path(instance, filename):
-    return os.path.join(
-        'images',
-        'threads',
-        'thread_username_' + str(instance.username),
-        filename
-    )
+    path = 'images/threads/thread_username_%s' % instance.username
+    format = filename
+    return os.path.join(path, format)
 
 class Thread(models.Model):
 

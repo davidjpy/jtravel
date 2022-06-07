@@ -18,6 +18,6 @@ const useRefreshToken = () => {
     return response.data.access;
   }
   return refresh;
-}
+};
 
 export default useRefreshToken;

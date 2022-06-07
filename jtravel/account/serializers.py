@@ -17,11 +17,20 @@ class UserSerializer(serializers.ModelSerializer):
             'name',
             'profile_image',
             'about',
+            'liked_thread',
+            'saved_thread',
             'start_date',
             'is_active',
             'last_login'
         )
         read_only_field = ('start_date',)
+        
+    def update(self, instance, validated_data):
+        instance = super(UserSerializer, self).update(instance, validated_data)
+        instance.is_active = True
+        instance.save()
+        
+        return instance
 
 # Register Serializer
 class RegisterSerializer(UserSerializer):
@@ -33,12 +42,12 @@ class RegisterSerializer(UserSerializer):
 
     class Meta:
         model = Account
-        fields = [
+        fields = (
             'email',
             'username',
             'password',
             'name',
-        ]
+        )
         extra_kwargs = {'password': {'wirte_only': True}}
         
     def create(self, validated_data):

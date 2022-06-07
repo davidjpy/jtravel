@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Box,
   Avatar,
@@ -9,7 +9,8 @@ import {
   CardContent,
   Button,
   CardActions,
-  TextField
+  TextField,
+  Badge
 } from '@mui/material';
 import { styled } from '@mui/material/styles'
 import ManageAccountsRoundedIcon from '@mui/icons-material/ManageAccountsRounded';
@@ -20,6 +21,7 @@ import VpnKeyRoundedIcon from '@mui/icons-material/VpnKeyRounded';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
+import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 
 import axiosInstance from '../../utils/Axios';
 
@@ -40,6 +42,12 @@ const EditTextField = styled(TextField)({
     },
   },
   width: '100%'
+});
+
+const StyledIconButton = styled(IconButton)({
+  '&:hover': {
+    backgroundColor: '#2979ff'
+  }
 });
 
 function Info({ auth, updateTiggerer, setUpdateTiggerer }) {
@@ -67,16 +75,19 @@ function Info({ auth, updateTiggerer, setUpdateTiggerer }) {
     setUpdateTiggerer(e + 1);
   };
 
+  const handleUploadImage = (e) => {
+    setEditProfileImage(e.target.files[0]);
+  };
+
   const handleProfileUpdate = async () => {
     try {
-      await axiosInstance.put(`account/auth/user/${id}/`,
-        {
-          "email": editEmail,
-          "username": editUsername,
-          "name": editName,
-          "about": editAbout,
-        },
-        {
+      const formData = new FormData();
+
+      formData.append('email', editEmail)
+      formData.append('username', editUsername)
+      formData.append('name', editName)
+      formData.append('about', editAbout)
+      await axiosInstance.put(`account/auth/user/${id}/`, formData, {
           headers:
           {
             Authorization: 'Bearer ' + localStorage.getItem('access_token')
@@ -89,10 +100,44 @@ function Info({ auth, updateTiggerer, setUpdateTiggerer }) {
     };
   };
 
+  useEffect(() => {
+    const handleImageUpdate = async () => {
+      try {
+        const formData = new FormData();
+        formData.append('profile_image', editProfileImage);
+
+        await axiosInstance.put(`account/auth/user/${id}/`, formData,
+          {
+            headers:
+            {
+              Authorization: 'Bearer ' + localStorage.getItem('access_token')
+            }
+          });
+        handleUpdateProfile()
+      }
+      catch (err) {
+        console.error(err);
+      };
+    };
+    if (editProfileImage !== profile_image) {
+      handleImageUpdate(updateTiggerer);
+    };
+  }, [editProfileImage]);
+
   return (
     <StyledBox paddingTop={16} paddingBottom={2}>
       <Box sx={{ display: 'flex', justifyContent: 'start', width: 920 }}>
-        <Avatar src={profile_image} sx={{ height: 180, width: 180, ml: 2, mr: 4 }} />
+        <Box>
+          <Badge overlap='circular' anchorOrigin={{ 'vertical': 'bottom', 'horizontal': 'right' }}
+            badgeContent={
+              <StyledIconButton component='label' sx={{ color: 'white', bgcolor: '#455a64' }}>
+                <input type='file' accept='image/*' hidden onChange={handleUploadImage} />
+                <AddPhotoAlternateIcon />
+              </StyledIconButton>
+            } sx={{ mr: 4 }}>
+            <Avatar src={profile_image} sx={{ height: 180, width: 180, ml: 2 }} />
+          </Badge>
+        </Box>
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, mr: 2 }}>
           {isEditProfile ? (
             <>
@@ -104,9 +149,9 @@ function Info({ auth, updateTiggerer, setUpdateTiggerer }) {
                 defaultValue={email} onChange={e => setEditEmail(e.target.value)} InputProps={{ style: { fontSize: 7 } }} />
               <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
                 <Button variant='contained' onClick={async () => { await handleProfileUpdate(); toggleEditProfileMode(); }} startIcon={<SaveIcon />}
-                  sx={{ width: 116 }}>Save</Button>
+                  sx={{ width: 116, padding: '4px' }}>Save</Button>
                 <Button variant='contained' color='inherit' onClick={toggleEditProfileMode} startIcon={<CancelRoundedIcon />}
-                  sx={{ width: 116 }}>Cancel</Button>
+                  sx={{ width: 116, padding: '4px' }}>Cancel</Button>
               </Box>
             </>
           ) : (
@@ -142,14 +187,14 @@ function Info({ auth, updateTiggerer, setUpdateTiggerer }) {
             {isEditAbout ? (
               <CardActions sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'flex-end', flexGrow: 1, paddingTop: 0 }}>
                 <Button variant='contained' onClick={() => { handleProfileUpdate(); toggleEditAboutMode(); }} startIcon={<SaveIcon />}
-                  sx={{ width: 116 }}>Save</Button>
+                  sx={{ width: 116, padding: '4px' }}>Save</Button>
                 <Button variant='contained' color='inherit' onClick={toggleEditAboutMode} startIcon={<CancelRoundedIcon />}
-                  sx={{ width: 116 }}>Cancel</Button>
+                  sx={{ width: 116, padding: '4px' }}>Cancel</Button>
               </CardActions>
             ) : (
               <CardActions sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'flex-end', flexGrow: 1, }}>
-                <Button size="small" startIcon={<EditRoundedIcon />} variant='contained' onClick={toggleEditAboutMode}
-                  sx={{ width: 85 }}>Edit</Button>
+                <Button size='small' startIcon={<EditRoundedIcon />} variant='contained' onClick={toggleEditAboutMode}
+                  sx={{ width: 85, padding: '4px' }}>Edit</Button>
               </CardActions>
             )}
           </Card>

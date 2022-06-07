@@ -11,18 +11,21 @@ from .models import Account
 class RegisterViewSet(viewsets.ModelViewSet):
     permission_classes = (AllowAny,)
     
-    def create(self, request, format='json'):
+    def create(self, request):
         serializer = RegisterSerializer(data=request.data)
         
-        if serializer.is_valid():
+        try:
+            serializer.is_valid(raise_exception=True)
             user = serializer.save()
             
             if user:
-                json = serializer.data
+                data = serializer.data
                 
-                return Response(json, status=status.HTTP_201_CREATED)
+                return Response(data, status=status.HTTP_201_CREATED)
+            
+        except Exception as e:
         
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
 class LoginViewSet(viewsets.ModelViewSet, TokenObtainPairView):
     serializer_class = LoginSerialier
@@ -57,14 +60,14 @@ class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer 
     queryset = Account.objects.all()
     permission_classes = (AllowAny,)
-
+    
     # serializer_class = UserSerializer 
     # queryset = Account.objects.none()
     # permission_classes = (IsAuthenticated,)
     
     # def get_queryset(self): 
     #     return Account.objects.filter(id=self.request.user.id)
-    
+
 class BlacklistTokenView(viewsets.ModelViewSet):
     permission_classes = (AllowAny,)
 
