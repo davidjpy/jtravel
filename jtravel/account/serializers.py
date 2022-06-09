@@ -17,8 +17,6 @@ class UserSerializer(serializers.ModelSerializer):
             'name',
             'profile_image',
             'about',
-            'liked_thread',
-            'saved_thread',
             'start_date',
             'is_active',
             'last_login'

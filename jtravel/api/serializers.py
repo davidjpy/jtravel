@@ -1,12 +1,14 @@
 from rest_framework import serializers
 
 from .models import Thread
+from account.models import Account
 
 class ThreadSerializer(serializers.ModelSerializer):
     
     profile_image = serializers.SerializerMethodField('get_profile_image')
     username_display = serializers.SerializerMethodField('get_username')
-    created = serializers.DateTimeField(format="%d %B, %Y %H:%M:%S")
+    liked = serializers.SlugRelatedField(queryset=Account.objects.all(), many=True, slug_field='username') 
+    created = serializers.DateTimeField(format='%d %B, %Y %H:%M:%S')
     
     class Meta:
         model = Thread
@@ -18,6 +20,7 @@ class ThreadSerializer(serializers.ModelSerializer):
                   'alt', 
                   'image', 
                   'content', 
+                  'liked',
                   'created', 
                   'status')
         

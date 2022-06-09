@@ -60,8 +60,6 @@ class Account(AbstractBaseUser, PermissionsMixin):
     name = models.CharField(max_length=255, default='')
     profile_image = models.ImageField(max_length=255, upload_to=profile_image_path, default='images/default.jpg', blank=True, null=True)
     about = models.TextField(max_length=255, default='Write something about yourself...', blank=True)
-    liked_thread = models.JSONField(default=None, blank=True, null=True)
-    saved_thread = models.JSONField(default=None, blank=True, null=True)
     start_date = models.DateTimeField(default=timezone.now)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)

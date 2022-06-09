@@ -55,7 +55,7 @@ function HomePage() {
         <Box bgcolor={'background.default'} color={'text.primary'}>
           <Stack direction='row' justifyContent='space-between'>
             <Suggest />
-            <Thread thread={thread} />
+            <Thread auth={auth.user} thread={thread} threadCounter={threadCounter} setThreadCounter={setThreadCounter} />
             <Social />
           </Stack>
           <Create auth={auth.user} threadCounter={threadCounter} setThreadCounter={setThreadCounter} />
