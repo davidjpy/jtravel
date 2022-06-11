@@ -3,11 +3,11 @@ import axiosInstance from '../utils/Axios';
 
 const useProfileThread = () => {
 
-  const { setProfileThread, setProfileThreadCounter } = useAuth();
+  const { currentView, setProfileThread, setProfileThreadCounter } = useAuth();
 
   const getThread = async () => {
 
-    const response = await axiosInstance.get('api/thread/', 
+    const response = await axiosInstance.get(`api/${currentView}/`, 
     {
       headers: 
       {

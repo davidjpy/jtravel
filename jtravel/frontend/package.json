@@ -23,7 +23,6 @@
     "axios": "^0.27.2",
     "babel-loader": "^8.2.5",
     "css-loader": "^6.7.1",
-    "faker": "^5.5.3",
     "jwt-decode": "^3.1.2",
     "moment": "^2.29.3",
     "react": "^18.1.0",
@@ -35,6 +34,7 @@
     "webpack-cli": "^4.9.2"
   },
   "devDependencies": {
+    "@faker-js/faker": "^7.2.0",
     "file-loader": "^6.2.0",
     "source-map-loader": "^3.0.1"
   }

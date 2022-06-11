@@ -42,7 +42,7 @@ import FavoriteRoundedIcon from '@mui/icons-material/FavoriteRounded';
 import BookmarkRoundedIcon from '@mui/icons-material/BookmarkRounded';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 
-import { WebIcon, UserIcon, FunctionIcon } from './SidebarButtons';
+import { WebIcon, FunctionIcon } from './SidebarButtons';
 import useValidation from '../../hooks/useValidation';
 import useAuth from '../../hooks/useAuth';
 import axiosInstance from '../../utils/Axios';
@@ -197,7 +197,7 @@ function Sidebar({ appTheme, setAppTheme }) {
   const openAccountMenu = Boolean(anchorEl);
   const { emailError, usernameError, passwordError, matchError, isError }
     = useValidation(email, username, password1, password2);
-  const { auth, setAuth, requireLoginAlert, setRequireLoginAlert, profileThread, profileThreadCounter } = useAuth();
+  const { auth, setAuth, requireLoginAlert, setRequireLoginAlert } = useAuth();
   const { user } = auth;
 
   const toggleLoginWindow = () => {
@@ -334,10 +334,6 @@ function Sidebar({ appTheme, setAppTheme }) {
     setAnchorEl(null);
   };
 
-  const logger = () => {
-    console.log(auth, profileThread, profileThreadCounter)
-  };
-
   return (
     <>
       <Box>
@@ -427,19 +423,14 @@ function Sidebar({ appTheme, setAppTheme }) {
                   </>
                 ) : (
                   <>
-                    <IconButton size='large' color='inherit' onClick={logger}>
-                      <Badge badgeContent={11} color='error'>
-                        <VpnKeyRoundedIcon fontSize='inherit' />
+                    <IconButton size='large' aria-label='notification' color='inherit'>
+                      <Badge badgeContent={32} color='error'>
+                        <NotificationsIcon fontSize='inherit' />
                       </Badge>
                     </IconButton>
                     <IconButton size='large' aria-label='mail' color='inherit'>
                       <Badge badgeContent={20} color='error'>
                         <MailIcon fontSize='inherit' />
-                      </Badge>
-                    </IconButton>
-                    <IconButton size='large' aria-label='notification' color='inherit'>
-                      <Badge badgeContent={32} color='error'>
-                        <NotificationsIcon fontSize='inherit' />
                       </Badge>
                     </IconButton>
                     <Tooltip title='Account Settings'>
@@ -475,8 +466,7 @@ function Sidebar({ appTheme, setAppTheme }) {
                             zIndex: 0,
                           },
                         },
-                      }}
-                    >
+                      }}>
                       <MenuItem onClick={() => { closeAccountMenu(); navigate('profile/') }}>
                         <Avatar src={user?.profile_image} aria-label={user?.username} /> Profile
                       </MenuItem>
@@ -531,7 +521,6 @@ function Sidebar({ appTheme, setAppTheme }) {
               }
             </Toolbar>
           </AppBar>
-          {/* Drawer */}
           <Drawer sx={{ width: drawerWidth, flexShrink: 0, '& .MuiDrawer-paper': { width: drawerWidth, boxSizing: 'border-box' } }}
             onBackdropClick={toggleDrawer} variant='temporary' anchor='left' open={open}>
             <DrawerHeader>
@@ -551,20 +540,6 @@ function Sidebar({ appTheme, setAppTheme }) {
                       <ListItemText primary={item.title} sx={{ opacity: open ? 1 : 0 }} />
                     </ListItemButton>
                   </Link>
-                )
-              })}
-            </List>
-            <Divider />
-            <List>
-              {UserIcon.map((item, index) => {
-                return (
-                  <ListItemButton key={index}
-                    sx={{ minHeight: 48, justifyContent: open ? 'initial' : 'center', px: 2.5 }}>
-                    <ListItemIcon sx={{ minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center' }}>
-                      {item.icon}
-                    </ListItemIcon>
-                    <ListItemText primary={item.title} sx={{ opacity: open ? 1 : 0 }} />
-                  </ListItemButton>
                 )
               })}
             </List>

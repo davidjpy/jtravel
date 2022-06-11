@@ -8,6 +8,7 @@ class ThreadSerializer(serializers.ModelSerializer):
     profile_image = serializers.SerializerMethodField('get_profile_image')
     username_display = serializers.SerializerMethodField('get_username')
     liked = serializers.SlugRelatedField(queryset=Account.objects.all(), many=True, slug_field='username') 
+    bookmarked = serializers.SlugRelatedField(queryset=Account.objects.all(), many=True, slug_field='username')
     created = serializers.DateTimeField(format='%d %B, %Y %H:%M:%S')
     
     class Meta:
@@ -21,6 +22,7 @@ class ThreadSerializer(serializers.ModelSerializer):
                   'image', 
                   'content', 
                   'liked',
+                  'bookmarked',
                   'created', 
                   'status')
         

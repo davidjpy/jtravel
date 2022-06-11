@@ -1,4 +1,4 @@
-import React, { useState, forwardRef, useEffect } from 'react'
+import React, { useState, forwardRef } from 'react'
 import {
   Box,
   Snackbar,
@@ -10,26 +10,16 @@ import {
   Avatar,
   IconButton,
   Typography,
-  List,
-  ListItem,
-  ListItemAvatar,
-  ListItemText,
-  Divider,
   Checkbox,
-  Button
 } from '@mui/material';
 import MuiAlert from '@mui/material/Alert';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import ShareIcon from '@mui/icons-material/Share';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
 import BookmarkBorderOutlinedIcon from '@mui/icons-material/BookmarkBorderOutlined';
 import BookmarkRoundedIcon from '@mui/icons-material/BookmarkRounded';
-import moment from 'moment'
 
 import axiosInstance from '../../utils/Axios';
-
-// import faker from  'faker';
 
 function Thread({ auth, thread, threadCounter, setThreadCounter }) {
 
@@ -51,12 +41,12 @@ function Thread({ auth, thread, threadCounter, setThreadCounter }) {
 
 export default Thread;
 
-function ThreadItem({ authUsername, id, username, username_display, profile_image, content, image, liked, created, threadCounter, setThreadCounter }) {
+function ThreadItem({ authUsername, id, username, username_display, profile_image, content, image, liked, bookmarked, created, threadCounter, setThreadCounter }) {
 
-  const [like, setLike] = useState(liked.indexOf(authUsername) > -1 && true);
+  const [like, setLike] = useState(liked.indexOf(authUsername) > -1);
   const [likeAlert, setLikeAlert] = useState(false);
   const [unlikeAlert, setUnlikeAlert] = useState(false);
-  const [bookmark, setBookmark] = useState(false);
+  const [bookmark, setBookmark] = useState(bookmarked.indexOf(authUsername) > -1);
   const [bookmarkAlert, setBookmarkAlert] = useState(false);
   const [unBookmarkAlert, setUnBookmarkAlert] = useState(false);
 
@@ -69,7 +59,7 @@ function ThreadItem({ authUsername, id, username, username_display, profile_imag
   };
 
   const handleAddFavourite = async () => {
-    await axiosInstance.post(`api/public/favourites/${id}/`, null, {
+    await axiosInstance.post(`api/public/favourite/${id}/`, null, {
       headers: {
         Authorization: 'Bearer ' + localStorage.getItem('access_token')
       }
@@ -80,6 +70,22 @@ function ThreadItem({ authUsername, id, username, username_display, profile_imag
     }
     else {
       setUnlikeAlert(true);
+      handleUpdate(threadCounter);
+    }
+  };
+
+  const handleAddBookmark = async () => {
+    await axiosInstance.post(`api/public/bookmark/${id}/`, null, {
+      headers: {
+        Authorization: 'Bearer ' + localStorage.getItem('access_token')
+      }
+    });
+    if (!bookmark) {
+      setBookmarkAlert(true);
+      handleUpdate(threadCounter);
+    }
+    else {
+      setUnBookmarkAlert(true);
       handleUpdate(threadCounter);
     }
   };
@@ -105,7 +111,7 @@ function ThreadItem({ authUsername, id, username, username_display, profile_imag
 
   const toggleBookmarkButton = (event) => {
     setBookmark(event.target.checked);
-    event.target.checked ? setBookmarkAlert(true) : setUnBookmarkAlert(true)
+    handleAddBookmark();
   };
 
   const closeBookmarkAlert = (event, reason) => {
@@ -121,10 +127,6 @@ function ThreadItem({ authUsername, id, username, username_display, profile_imag
     };
     setUnBookmarkAlert(false);
   };
-
-  const logger = () => {
-    console.log(liked)
-  }
 
   return (
     <>
@@ -153,9 +155,6 @@ function ThreadItem({ authUsername, id, username, username_display, profile_imag
             icon={<BookmarkBorderOutlinedIcon />}
             checkedIcon={<BookmarkRoundedIcon sx={{ color: '#37474f' }} />} 
             sx={{ ml: 'auto' }} />
-          <IconButton onClick={logger}>
-            <ShareIcon />
-          </IconButton>
         </CardActions>
         <CardContent>
           <Typography variant='body1'>
@@ -163,26 +162,26 @@ function ThreadItem({ authUsername, id, username, username_display, profile_imag
           </Typography>
         </CardContent>
         <Snackbar open={likeAlert} autoHideDuration={2000} onClose={closeLikeAlert}>
-          <Alert onClose={closeLikeAlert} sx={{ bgcolor: '#b71c1c', width: 300 }}>
+          <Alert onClose={closeLikeAlert} sx={{ bgcolor: '#b71c1c', width: '100%' }}>
             You've Liked this Thread
           </Alert>
         </Snackbar>
         <Snackbar open={unlikeAlert} autoHideDuration={2000} onClose={closeUnlikeAlert}>
-          <Alert onClose={closeUnlikeAlert} sx={{ bgcolor: '#795548', width: 300 }}>
+          <Alert onClose={closeUnlikeAlert} sx={{ bgcolor: '#795548', width: '100%' }}>
             You've Unliked this Thread
           </Alert>
         </Snackbar>
         <Snackbar open={bookmarkAlert} autoHideDuration={2000} onClose={closeBookmarkAlert}>
-          <Alert onClose={closeBookmarkAlert} sx={{ bgcolor: '#37474f', width: 300 }}>
+          <Alert onClose={closeBookmarkAlert} sx={{ bgcolor: '#37474f', width: '100%' }}>
             You've Bookmarked this Thread
           </Alert>
         </Snackbar>
         <Snackbar open={unBookmarkAlert} autoHideDuration={2000} onClose={closeUnBookmarkAlert}>
-          <Alert onClose={closeUnBookmarkAlert} sx={{ bgcolor: '#795548', width: 300 }}>
+          <Alert onClose={closeUnBookmarkAlert} sx={{ bgcolor: '#795548', width: '100%' }}>
             You've Unbookmarked this Thread
           </Alert>
         </Snackbar>
       </Card>
     </>
-  )
+  );
 };

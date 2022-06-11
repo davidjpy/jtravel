@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Stack, Box } from '@mui/material';
 
 import Thread from '../components/homepage/Thread';
-import Social from '../components/homepage/Social';
+import Panel from '../components/homepage/Panel';
 import Suggest from '../components/homepage/Suggest';
 import Create from '../components/homepage/Create';
 import useAuth from '../hooks/useAuth';
@@ -56,7 +56,7 @@ function HomePage() {
           <Stack direction='row' justifyContent='space-between'>
             <Suggest />
             <Thread auth={auth.user} thread={thread} threadCounter={threadCounter} setThreadCounter={setThreadCounter} />
-            <Social />
+            <Panel auth={auth.user} />
           </Stack>
           <Create auth={auth.user} threadCounter={threadCounter} setThreadCounter={setThreadCounter} />
         </Box>

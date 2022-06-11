@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box } from '@mui/material';
+import { Box, Button } from '@mui/material';
 
 import Info from '../components/profilepage/Info';
 import Media from '../components/profilepage/Media';
@@ -11,7 +11,7 @@ function ProfilePage() {
 
   const getUser = useGetUser();
   const getThread = useProfileThread();
-  const { auth, profileThread, profileThreadCounter, setProfileThreadCounter } = useAuth();
+  const { auth, profileThread, currentView, setCurrentView, profileThreadCounter, setProfileThreadCounter } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
   const [tiggerer, setTiggerer] = useState(0);
   const [updateTiggerer, setUpdateTiggerer] = useState(0);
@@ -42,7 +42,7 @@ function ProfilePage() {
       };
     };
     verifyProfile();
-  }, [profileThreadCounter, tiggerer]);
+  }, [profileThreadCounter, tiggerer, currentView]);
 
   useEffect(() => {
     const verifyProfile = async () => {
@@ -68,11 +68,14 @@ function ProfilePage() {
             updateTiggerer={updateTiggerer}
             setUpdateTiggerer={setUpdateTiggerer} />
           <Media 
+            auth={auth.user}
             profileThread={profileThread.profilethread}
             profileThreadCounter={profileThreadCounter}
             setProfileThreadCounter={setProfileThreadCounter}
             tiggerer={tiggerer}
-            setTiggerer={setTiggerer} />
+            setTiggerer={setTiggerer}
+            currentView={currentView}
+            setCurrentView={setCurrentView} />
         </Box>
       )}
     </>

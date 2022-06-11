@@ -23,10 +23,11 @@ import {
   TextField,
   Button,
   Snackbar,
-  Alert
+  Alert,
+  Checkbox
 } from '@mui/material';
-import moment from 'moment'
 import { styled } from '@mui/material/styles';
+import moment from 'moment'
 import PhotoLibraryRoundedIcon from '@mui/icons-material/PhotoLibraryRounded';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import PhotoAlbumRoundedIcon from '@mui/icons-material/PhotoAlbumRounded';
@@ -35,6 +36,10 @@ import CreateRoundedIcon from '@mui/icons-material/CreateRounded';
 import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
+import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
+import BookmarkBorderOutlinedIcon from '@mui/icons-material/BookmarkBorderOutlined';
+import BookmarkRoundedIcon from '@mui/icons-material/BookmarkRounded';
+
 
 import axiosInstance from '../../utils/Axios';
 
@@ -73,16 +78,31 @@ const StyledCardContent = styled(CardContent)({
   }
 })
 
-function Media({ profileThread, profileThreadCounter, setProfileThreadCounter, tiggerer, setTiggerer }) {
+function Media({ auth, profileThread, profileThreadCounter, setProfileThreadCounter, tiggerer, setTiggerer, currentView, setCurrentView }) {
 
-  const [focus, setFocus] = useState(0);
+  const { username } = auth;
+
+  const [focus, setFocus] = useState(currentView);
   const [deleteAlert, setDeleteAlert] = useState(false);
+
 
   const closedeleteAlert = (event, reason) => {
     if (reason === 'clickaway') {
       return;
     };
     setDeleteAlert(false);
+  };
+
+  const handleThreadView = () => {
+    setCurrentView('thread');
+  };
+
+  const handleFavouriteView = () => {
+    setCurrentView('favourite');
+  };
+
+  const handleBookmarkView = () => {
+    setCurrentView('bookmark');
   };
 
   return (
@@ -92,19 +112,21 @@ function Media({ profileThread, profileThreadCounter, setProfileThreadCounter, t
         showLabels
         value={focus}
         onChange={(event, newValue) => { setFocus(newValue); }}>
-        <BottomNavigationAction label="Threads" icon={<PhotoLibraryRoundedIcon />} sx={{ mr: 5 }} />
-        <BottomNavigationAction label="Favorites" icon={<FavoriteIcon />} sx={{ mr: 5 }} />
-        <BottomNavigationAction label="Bookmarks" icon={<PhotoAlbumRoundedIcon />} />
+        <BottomNavigationAction onClick={handleThreadView} value='thread' label="Threads" icon={<PhotoLibraryRoundedIcon />} sx={{ mr: 5 }} />
+        <BottomNavigationAction onClick={handleFavouriteView} value='favourite' label="Favorites" icon={<FavoriteIcon />} sx={{ mr: 5 }} />
+        <BottomNavigationAction onClick={handleBookmarkView} value='bookmark' label="Bookmarks" icon={<PhotoAlbumRoundedIcon />} />
       </BottomNavigation>
       <ImageList cols={3} rowHeight='auto' sx={{ mt: 2, width: 920, paddingBottom: 5, overflow: 'unset' }}>
         {profileThread.map((item) => (
           <ThreadItem
             key={item.image}
+            authUsername={username}
             profileThreadCounter={profileThreadCounter}
             setProfileThreadCounter={setProfileThreadCounter}
             tiggerer={tiggerer}
             setTiggerer={setTiggerer}
             setDeleteAlert={setDeleteAlert}
+            currentView={currentView}
             {...item} />
         ))}
       </ImageList>
@@ -120,8 +142,15 @@ function Media({ profileThread, profileThreadCounter, setProfileThreadCounter, t
 
 export default Media;
 
-function ThreadItem({ id, image, alt, username, username_display, profile_image, content, created, profileThreadCounter, setProfileThreadCounter, tiggerer, setTiggerer, setDeleteAlert }) {
+function ThreadItem({ authUsername, id, image, alt, username, username_display, profile_image, content, created, liked,
+  bookmarked, profileThreadCounter, setProfileThreadCounter, tiggerer, setTiggerer, setDeleteAlert, currentView }) {
 
+  const [like, setLike] = useState(liked.indexOf(authUsername) > -1);
+  const [likeAlert, setLikeAlert] = useState(false);
+  const [unlikeAlert, setUnlikeAlert] = useState(false);
+  const [bookmark, setBookmark] = useState(bookmarked.indexOf(authUsername) > -1);
+  const [bookmarkAlert, setBookmarkAlert] = useState(false);
+  const [unBookmarkAlert, setUnBookmarkAlert] = useState(false);
   const [hover, setHover] = useState(false);
   const [openThread, setOpenThread] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -129,7 +158,61 @@ function ThreadItem({ id, image, alt, username, username_display, profile_image,
   const [editField, setEditField] = useState(content)
   const [updateAlert, setUpdateAlert] = useState(false);
   const openActionMenu = Boolean(anchorEl);
-  
+
+  const handleAddFavourite = async () => {
+    await axiosInstance.post(`api/public/favourite/${id}/`, null, {
+      headers: {
+        Authorization: 'Bearer ' + localStorage.getItem('access_token')
+      }
+    });
+    if (!like) {
+      setLikeAlert(true);
+      handleUpdate(threadCounter);
+    }
+    else {
+      setUnlikeAlert(true);
+      handleUpdate(threadCounter);
+    }
+  };
+
+  const toggleLikeButton = (event) => {
+    setLike(event.target.checked);
+    handleAddFavourite();
+  };
+
+  const closeLikeAlert = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    };
+    setLikeAlert(false);
+  };
+
+  const closeUnlikeAlert = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    };
+    setUnlikeAlert(false);
+  };
+
+  const toggleBookmarkButton = (event) => {
+    setBookmark(event.target.checked);
+    event.target.checked ? setBookmarkAlert(true) : setUnBookmarkAlert(true)
+  };
+
+  const closeBookmarkAlert = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    };
+    setBookmarkAlert(false);
+  };
+
+  const closeUnBookmarkAlert = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    };
+    setUnBookmarkAlert(false);
+  };
+
   const closeupdateAlert = (event, reason) => {
     if (reason === 'clickaway') {
       return;
@@ -188,22 +271,22 @@ function ThreadItem({ id, image, alt, username, username_display, profile_image,
                 titleTypographyProps={{ fontSize: 18 }}
                 avatar={<Avatar src={profile_image}
                   sx={{ height: 45, width: 45 }} />}
-                action={isEditMode ? null : <IconButton aria-label='actions' onClick={toggleActionMenu} ><MoreVertIcon size="small"
+                action={isEditMode || currentView !== 'thread' ? null: <IconButton aria-label='actions' onClick={toggleActionMenu} ><MoreVertIcon size="small"
                   aria-controls={openActionMenu ? 'account-menu' : undefined}
                   aria-haspopup="true"
                   aria-expanded={openActionMenu ? 'true' : undefined} /></IconButton>}
                 title={username_display}
                 subheader={created} />
-              <ActionMenu
-                anchorEl={anchorEl}
-                openActionMenu={openActionMenu}
-                closeActionMenu={closeActionMenu}
-                toggleThreadWindow={toggleThreadWindow}
-                profileThreadCounter={profileThreadCounter}
-                setProfileThreadCounter={setProfileThreadCounter}
-                id={id}
-                toggleEditMode={toggleEditMode}
-                setDeleteAlert={setDeleteAlert} />
+                <ActionMenu
+                  anchorEl={anchorEl}
+                  openActionMenu={openActionMenu}
+                  closeActionMenu={closeActionMenu}
+                  toggleThreadWindow={toggleThreadWindow}
+                  profileThreadCounter={profileThreadCounter}
+                  setProfileThreadCounter={setProfileThreadCounter}
+                  id={id}
+                  toggleEditMode={toggleEditMode}
+                  setDeleteAlert={setDeleteAlert} />
               <CardMedia component='img' image={image} height='auto' />
               {isEditMode ? (
                 <>
@@ -220,11 +303,34 @@ function ThreadItem({ id, image, alt, username, username_display, profile_image,
                   </StyledCardContent>
                 </>
               ) : (
-                <CardContent>
-                  <Typography variant='body2'>
-                    {content}
-                  </Typography>
-                </CardContent>
+                <>
+                  <CardActions disableSpacing sx={{ paddingBottom: 0 }}>
+                    {currentView !== 'thread' &&
+                      <>
+                        <Checkbox checked={like} onChange={toggleLikeButton}
+                          icon={<FavoriteBorder />}
+                          checkedIcon={<FavoriteIcon sx={{ color: '#b71c1c' }} />} />
+                        {liked.length > 0 &&
+                          <>
+                            <Typography variant='subtitle2' sx={{ mr: 0.5 }}>Liked by</Typography>
+                            <Typography variant='subtitle2' sx={{ mr: 0.5, color: '#2979ff' }}>{liked[0]}</Typography>
+                            <Typography variant='subtitle2' sx={{ mr: 0.5 }}>{liked.length > 1 && 'and'}</Typography>
+                            <Typography variant='subtitle2' sx={{ color: '#2979ff' }}>{liked.length > 1 && `other ${liked.length - 1} ${liked.length > 2 ? 'users' : 'user'}`} </Typography>
+                          </>
+                        }
+                        <Checkbox checked={bookmark} onChange={toggleBookmarkButton}
+                          icon={<BookmarkBorderOutlinedIcon />}
+                          checkedIcon={<BookmarkRoundedIcon sx={{ color: '#37474f' }} />}
+                          sx={{ ml: 'auto' }} />
+                      </>
+                    }
+                  </CardActions>
+                  <CardContent>
+                    <Typography variant='body1'>
+                      {content}
+                    </Typography>
+                  </CardContent>
+                </>
               )}
             </Card>
           </ThreadBox>
@@ -253,16 +359,37 @@ function ThreadItem({ id, image, alt, username, username_display, profile_image,
         />
       </ImageListItem>
       <Snackbar open={updateAlert} autoHideDuration={2000} onClose={closeupdateAlert}>
-        <Alert onClose={closeupdateAlert} severity='success' 
+        <Alert onClose={closeupdateAlert} severity='success'
           sx={{ bgcolor: '#1b5e20', color: 'white', width: '100%' }}>
           You've Successfully Updated this Thread
+        </Alert>
+      </Snackbar>
+      <Snackbar open={likeAlert} autoHideDuration={2000} onClose={closeLikeAlert}>
+        <Alert onClose={closeLikeAlert} sx={{ color: 'white', bgcolor: '#b71c1c', width: '100%' }}>
+          You've Liked this Thread
+        </Alert>
+      </Snackbar>
+      <Snackbar open={unlikeAlert} autoHideDuration={2000} onClose={closeUnlikeAlert}>
+        <Alert onClose={closeUnlikeAlert} sx={{ color: 'white', bgcolor: '#795548', width: '100%' }}>
+          You've Unliked this Thread
+        </Alert>
+      </Snackbar>
+      <Snackbar open={bookmarkAlert} autoHideDuration={2000} onClose={closeBookmarkAlert}>
+        <Alert onClose={closeBookmarkAlert} sx={{ color: 'white', bgcolor: '#37474f', width: '100%' }}>
+          You've Bookmarked this Thread
+        </Alert>
+      </Snackbar>
+      <Snackbar open={unBookmarkAlert} autoHideDuration={2000} onClose={closeUnBookmarkAlert}>
+        <Alert onClose={closeUnBookmarkAlert} sx={{ color: 'white', bgcolor: '#795548', width: '100%' }}>
+          You've Unbookmarked this Thread
         </Alert>
       </Snackbar>
     </>
   );
 };
 
-function ActionMenu({ id, toggleThreadWindow, anchorEl, openActionMenu, closeActionMenu, profileThreadCounter, setProfileThreadCounter, toggleEditMode, setDeleteAlert }) {
+function ActionMenu({ id, toggleThreadWindow, anchorEl, openActionMenu, closeActionMenu,
+  profileThreadCounter, setProfileThreadCounter, toggleEditMode, setDeleteAlert }) {
 
   const deleteThread = async () => {
     await axiosInstance.delete(`api/public/thread/${id}`);

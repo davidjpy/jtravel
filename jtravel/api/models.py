@@ -18,6 +18,7 @@ class Thread(models.Model):
     alt = models.TextField(max_length=255, blank=True)
     image = models.ImageField(max_length=255, upload_to=thread_image_path, blank=True)
     content = models.TextField(blank=True)
-    liked = models.ManyToManyField(Account, related_name='liked', blank=True, null=True)
+    liked = models.ManyToManyField(Account, related_name='liked', blank=True)
+    bookmarked = models.ManyToManyField(Account, related_name='bookmarked', blank=True)
     created = models.DateTimeField(default=timezone.now, blank=True, null=True)
     status = models.CharField(max_length=11, choices=options, default='active')

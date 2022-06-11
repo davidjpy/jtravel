@@ -113,7 +113,7 @@ function Info({ auth, updateTiggerer, setUpdateTiggerer }) {
               Authorization: 'Bearer ' + localStorage.getItem('access_token')
             }
           });
-        handleUpdateProfile()
+        handleUpdateProfile();
       }
       catch (err) {
         console.error(err);
