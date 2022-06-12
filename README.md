@@ -1,5 +1,18 @@
 # J-Travel
-J-Travel is a social media web application for people sharing their travelling experience in Japan. 
+J-Travel is a social media web application for people to share their travelling experience in Japan. 
+
+## Overview
+This is a React.js + Django hybrid-app, with the same backend serves HTML pages embedding JavaScript components and API requests. The main dependencies used are as follows:
+* Frontend
+  1. react
+  2. react-router-dom
+  3. webpack
+  4. babel
+  5. mui/material
+  6. axios
+* Backend
+  1. django
+  2. Simple JWT
 
 ## Features
 * Register, login & logout your personal account.
@@ -7,3 +20,5 @@ J-Travel is a social media web application for people sharing their travelling e
 * Create, update & delete post.
 * Add post to favourite & bookmark.
 * other small features, such as unmute background video, toggle dark theme, links to external website
+
+## Development Dependencies
