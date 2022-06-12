@@ -22,3 +22,4 @@ This is a React.js + Django hybrid-app, with the same backend serves HTML pages 
 * Other small features, such as unmute background video, toggle dark theme, links to external website.
 
 ### Demo - Register, login & logout your personal account
+<img src="demo\register_login_logout.gif" width="250" height="250"/>
