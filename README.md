@@ -11,7 +11,7 @@ This is a React.js + Django hybrid-app, with the same backend serves HTML pages 
   5. mui/material
   6. axios
 * Backend
-  1. django
+  1. Django
   2. Simple JWT
 
 ## Features
@@ -19,6 +19,4 @@ This is a React.js + Django hybrid-app, with the same backend serves HTML pages 
 * Edit your profile.
 * Create, update & delete post.
 * Add post to favourite & bookmark.
-* other small features, such as unmute background video, toggle dark theme, links to external website
-
-## Development Dependencies
+* Other small features, such as unmute background video, toggle dark theme, links to external website
