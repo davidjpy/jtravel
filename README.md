@@ -20,3 +20,5 @@ This is a React.js + Django hybrid-app, with the same backend serves HTML pages 
 * Create, update & delete post.
 * Add post to favourite & bookmark.
 * Other small features, such as unmute background video, toggle dark theme, links to external website.
+
+### Demo - Register, login & logout your personal account
