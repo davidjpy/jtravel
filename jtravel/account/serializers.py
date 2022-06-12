@@ -5,7 +5,6 @@ from django.contrib.auth.models import update_last_login
 
 from .models import Account
 
-# User Serializer
 class UserSerializer(serializers.ModelSerializer):
     
     class Meta:
@@ -30,7 +29,6 @@ class UserSerializer(serializers.ModelSerializer):
         
         return instance
 
-# Register Serializer
 class RegisterSerializer(UserSerializer):
     
     password = serializers.CharField(max_length=128, min_length=8, required=True, write_only=True)
@@ -59,7 +57,6 @@ class RegisterSerializer(UserSerializer):
         
         return instance
 
-# Login Serializer
 class LoginSerialier(TokenObtainPairSerializer):
     
     def validate(self, attrs):

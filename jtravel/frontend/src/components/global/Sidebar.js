@@ -434,9 +434,9 @@ function Sidebar({ appTheme, setAppTheme }) {
                       </Badge>
                     </IconButton>
                     <Tooltip title='Account Settings'>
-                      <IconButton onClick={toggleAccountMenu} size="small"
+                      <IconButton onClick={toggleAccountMenu} size='small'
                         aria-controls={openAccountMenu ? 'account-menu' : undefined}
-                        aria-haspopup="true"
+                        aria-haspopup='true'
                         aria-expanded={openAccountMenu ? 'true' : undefined}
                         sx={{ ml: 0.5, mr: 2 }}>
                         <Avatar src={user?.profile_image} aria-label={user?.username}

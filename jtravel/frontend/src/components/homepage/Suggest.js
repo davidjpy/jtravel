@@ -62,7 +62,7 @@ function Suggest() {
     for (var i = 0; i < 12; i++) {
       image.push(faker.image.avatar());
     };
-    setAvatar(image)
+    setAvatar(image);
   };
 
   const handleFeatureGallery = () => {
@@ -83,10 +83,6 @@ function Suggest() {
     handleFeatureGallery();
   }, []);
 
-  const logger = () => {
-    console.log(gallery)
-  }
-
   return (
     <StyledBox paddingTop={10} flex={2}>
       <Box sx={{ mt: 1, mr: 2 }}>
@@ -98,9 +94,9 @@ function Suggest() {
           {avatar.map((item, index) => (
             <StyledBadge
               key={index}
-              overlap="circular"
+              overlap='circular'
               anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-              variant="dot">
+              variant='dot'>
               <Avatar src={item} />
             </StyledBadge>
           ))}
@@ -118,7 +114,7 @@ function Suggest() {
                 title={item.name}
                 subtitle={item.author}
                 actionIcon={
-                  <IconButton onClick={logger}
+                  <IconButton
                     sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
                     aria-label={`info about ${item.name}`}>
                     <InfoIcon />
@@ -133,26 +129,26 @@ function Suggest() {
         <Card sx={{ display: 'flex', borderRadius: '16px', width: 400 }}>
           <Box sx={{ display: 'flex', flexDirection: 'column' }}>
             <CardContent sx={{ flex: '1 0 auto' }}>
-              <Typography component="div" variant="h6">
+              <Typography component='div' variant='h6'>
                 Pale Blue
               </Typography>
-              <Typography variant="subtitle1" color="text.secondary" component="div">
+              <Typography variant='subtitle1' color='text.secondary' component='div'>
                 よねづけんし Yonezu Kenshi
               </Typography>
             </CardContent>
             <Box sx={{ display: 'flex', alignItems: 'center', pl: 1, pb: 1 }}>
-              <IconButton aria-label="previous">
+              <IconButton aria-label='previous'>
                 {theme.direction === 'rtl' ? <SkipNextIcon /> : <SkipPreviousIcon />}
               </IconButton>
-              <IconButton aria-label="play/pause">
+              <IconButton aria-label='play/pause'>
                 <PlayArrowIcon sx={{ height: 38, width: 38 }} />
               </IconButton>
-              <IconButton aria-label="next">
+              <IconButton aria-label='next'>
                 {theme.direction === 'rtl' ? <SkipPreviousIcon /> : <SkipNextIcon />}
               </IconButton>
             </Box>
           </Box>
-          <CardMedia component="img" image={ablum} sx={{ width: 151, ml: 'auto' }} alt="Live from space album cover" />
+          <CardMedia component='img' image={ablum} sx={{ width: 151, ml: 'auto' }} alt='Live from space album cover' />
         </Card>
       </Box>
     </StyledBox>

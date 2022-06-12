@@ -1,4 +1,3 @@
-from email.policy import default
 from django.contrib.auth.models import (
     AbstractBaseUser,
     BaseUserManager,

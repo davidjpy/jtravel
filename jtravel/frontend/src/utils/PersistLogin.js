@@ -33,7 +33,7 @@ const PersistLogin = () => {
         <Outlet />
       )}
     </>
-  )
-}
+  );
+};
 
 export default PersistLogin;

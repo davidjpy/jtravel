@@ -26,7 +26,7 @@ function Thread({ auth, thread, threadCounter, setThreadCounter }) {
   const { username } = auth;
 
   return (
-    <Box paddingTop={8} flex={2} sx={{ display: 'flex', flexDirection: 'column-reverse' }}>
+    <Box paddingTop={8} flex={2} sx={{ display: 'flex', flexDirection: 'column-reverse', justifyContent: 'flex-end' }}>
       {thread.map((item) => (
         <ThreadItem 
           key={item.image} 

@@ -41,7 +41,7 @@ function NavigationPage() {
           <div>
             <Checkbox checked={muted} onChange={handleToggleMute}
               icon={<VolumeUpOutlinedIcon fontSize='large' color='disabled' />} checkedIcon={<VolumeOffOutlinedIcon fontSize='large' color='disabled' />}
-              sx={{ position: "fixed", top: 75, right: 25 }} />
+              sx={{ position: 'fixed', top: 75, right: 25 }} />
             <video src={videoBg} autoPlay loop muted={muted} />
           </div>
         )}

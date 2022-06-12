@@ -43,8 +43,8 @@ function App() {
         </BrowserRouter>
       </ThemeProvider>
     </React.StrictMode>
-  )
-}
+  );
+};
 
 
 const root = ReactDOM.createRoot(document.getElementById('app'));

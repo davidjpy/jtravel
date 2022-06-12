@@ -57,10 +57,6 @@ class RefreshViewSet(viewsets.ViewSet, TokenRefreshView):
         return Response(serializer.validated_data, status=status.HTTP_200_OK)        
 
 class UserViewSet(viewsets.ModelViewSet):
-    # serializer_class = UserSerializer 
-    # queryset = Account.objects.all()
-    # permission_classes = (AllowAny,)
-    
     serializer_class = UserSerializer 
     queryset = Account.objects.none()
     permission_classes = (IsAuthenticated,)
@@ -73,7 +69,7 @@ class BlacklistTokenView(viewsets.ModelViewSet):
 
     def post(self, request):
         try:
-            refresh_token = request.data["refresh_token"]
+            refresh_token = request.data['refresh_token']
             token = RefreshToken(refresh_token)
             token.blacklist()
             
