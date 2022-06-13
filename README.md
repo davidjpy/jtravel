@@ -51,6 +51,9 @@ https://user-images.githubusercontent.com/105224348/173363356-017b94a8-1e12-4425
 https://user-images.githubusercontent.com/105224348/173364089-64a7cf91-8d70-417a-a841-ed0dc438fc9f.mp4
 
 ### Add post to favourite & bookmark
-* Add favourite and bookmark
 
 https://user-images.githubusercontent.com/105224348/173368240-160710b0-671b-4075-b9b7-3efc2118c78c.mp4
+
+### Other small features, such as unmute background video, toggle dark theme, links to external website.
+
+https://user-images.githubusercontent.com/105224348/173369183-c37709c8-0bd5-494d-b3c9-fd11166c4cb9.mp4
