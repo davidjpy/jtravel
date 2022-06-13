@@ -22,6 +22,6 @@ This is a React.js + Django hybrid-app, with the same backend serves HTML pages 
 * Other small features, such as unmute background video, toggle dark theme, links to external website.
 
 ## Demonstrations 
-####
 * Register an account
+
 https://user-images.githubusercontent.com/105224348/173351700-8bafb495-feda-4e8a-a152-9f7342213d10.mp4
