@@ -167,11 +167,27 @@ function ThreadItem({ authUsername, id, image, alt, username, username_display, 
     });
     if (!like) {
       setLikeAlert(true);
-      handleUpdate(threadCounter);
+      renderEdit(tiggerer);
     }
     else {
       setUnlikeAlert(true);
-      handleUpdate(threadCounter);
+      renderEdit(tiggerer);
+    }
+  };
+
+  const handleAddBookmark = async () => {
+    await axiosInstance.post(`api/public/bookmark/${id}/`, null, {
+      headers: {
+        Authorization: 'Bearer ' + localStorage.getItem('access_token')
+      }
+    });
+    if (!bookmark) {
+      setBookmarkAlert(true);
+      renderEdit(tiggerer);
+    }
+    else {
+      setUnBookmarkAlert(true);
+      renderEdit(tiggerer);
     }
   };
 
@@ -196,7 +212,7 @@ function ThreadItem({ authUsername, id, image, alt, username, username_display, 
 
   const toggleBookmarkButton = (event) => {
     setBookmark(event.target.checked);
-    event.target.checked ? setBookmarkAlert(true) : setUnBookmarkAlert(true)
+    handleAddBookmark();
   };
 
   const closeBookmarkAlert = (event, reason) => {
@@ -233,7 +249,7 @@ function ThreadItem({ authUsername, id, image, alt, username, username_display, 
   };
 
   const renderEdit = (e) => {
-    setTiggerer(e - 1)
+    setTiggerer(e + 1)
   };
 
   const closeActionMenu = () => {

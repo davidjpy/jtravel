@@ -93,11 +93,13 @@ function Info({ auth, updateTiggerer, setUpdateTiggerer }) {
             Authorization: 'Bearer ' + localStorage.getItem('access_token')
           }
         });
-      handleUpdateProfile(updateTiggerer);
     }
     catch (err) {
       console.error(err);
-    };
+    }
+    finally {
+      handleUpdateProfile(updateTiggerer);
+    }
   };
 
   useEffect(() => {
