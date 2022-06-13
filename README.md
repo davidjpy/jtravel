@@ -23,17 +23,8 @@ This is a React.js + Django hybrid-app, with the same backend serves HTML pages 
 
 ## Demonstrations
 #### Register, login & logout your personal account
-* Register an account
 
-https://user-images.githubusercontent.com/105224348/173351700-8bafb495-feda-4e8a-a152-9f7342213d10.mp4
-
-* Login your account
-
-https://user-images.githubusercontent.com/105224348/173352349-7bd7604c-628d-4bcc-8b17-7682bc9db110.mp4
-
-* Logout your account
-
-https://user-images.githubusercontent.com/105224348/173352832-1f72897f-5841-413e-94c5-dcfac295a485.mp4
+https://user-images.githubusercontent.com/105224348/173371061-aa697dd1-2b5d-47e6-857d-92d038b665a5.mp4
 
 #### Edit your profile
 * Update user ID, name, email, profile picture and about me
