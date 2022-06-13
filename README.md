@@ -21,7 +21,8 @@ This is a React.js + Django hybrid-app, with the same backend serves HTML pages 
 * Add post to favourite & bookmark.
 * Other small features, such as unmute background video, toggle dark theme, links to external website.
 
-## Demonstrations 
+## Demonstrations
+#### Register, login & logout your personal account
 * Register an account
 
 https://user-images.githubusercontent.com/105224348/173351700-8bafb495-feda-4e8a-a152-9f7342213d10.mp4
@@ -33,3 +34,9 @@ https://user-images.githubusercontent.com/105224348/173352349-7bd7604c-628d-4bcc
 * Logout your account
 
 https://user-images.githubusercontent.com/105224348/173352832-1f72897f-5841-413e-94c5-dcfac295a485.mp4
+
+#### Edit your profile
+* Update personal information, including user ID, name, email, profile picture and about me
+
+https://user-images.githubusercontent.com/105224348/173359823-a77e5f63-2cef-45bd-8ba8-08321422e9f1.mp4
+
