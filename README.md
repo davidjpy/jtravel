@@ -32,7 +32,7 @@ https://user-images.githubusercontent.com/105224348/173371061-aa697dd1-2b5d-47e6
 https://user-images.githubusercontent.com/105224348/173359823-a77e5f63-2cef-45bd-8ba8-08321422e9f1.mp4
 
 ### Create, update & delete post
-* J-Travel will record the time zone when the user create a post.
+* J-Travel will record the date & time when the user create a post.
 
 https://user-images.githubusercontent.com/105224348/173372432-b7a4d1bb-41ac-4549-b279-9c268606a56e.mp4
 
