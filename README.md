@@ -46,5 +46,7 @@ https://user-images.githubusercontent.com/105224348/173359823-a77e5f63-2cef-45bd
 
 https://user-images.githubusercontent.com/105224348/173363356-017b94a8-1e12-4425-8697-4878b5067581.mp4
 
+* Update & delete a post
 
+https://user-images.githubusercontent.com/105224348/173364089-64a7cf91-8d70-417a-a841-ed0dc438fc9f.mp4
 
