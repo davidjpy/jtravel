@@ -36,7 +36,9 @@ https://user-images.githubusercontent.com/105224348/173352349-7bd7604c-628d-4bcc
 https://user-images.githubusercontent.com/105224348/173352832-1f72897f-5841-413e-94c5-dcfac295a485.mp4
 
 #### Edit your profile
-* Update personal information, including user ID, name, email, profile picture and about me
+* Update user ID, name, email, profile picture and about me
+  * Profile page will also record user's last login date
 
 https://user-images.githubusercontent.com/105224348/173359823-a77e5f63-2cef-45bd-8ba8-08321422e9f1.mp4
+
 
