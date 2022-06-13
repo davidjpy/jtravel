@@ -33,13 +33,8 @@ https://user-images.githubusercontent.com/105224348/173371061-aa697dd1-2b5d-47e6
 https://user-images.githubusercontent.com/105224348/173359823-a77e5f63-2cef-45bd-8ba8-08321422e9f1.mp4
 
 ### Create, update & delete post
-* Create a post
 
-https://user-images.githubusercontent.com/105224348/173363356-017b94a8-1e12-4425-8697-4878b5067581.mp4
-
-* Update & delete a post
-
-https://user-images.githubusercontent.com/105224348/173364089-64a7cf91-8d70-417a-a841-ed0dc438fc9f.mp4
+https://user-images.githubusercontent.com/105224348/173372432-b7a4d1bb-41ac-4549-b279-9c268606a56e.mp4
 
 ### Add post to favourite & bookmark
 
