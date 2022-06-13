@@ -41,4 +41,8 @@ https://user-images.githubusercontent.com/105224348/173352832-1f72897f-5841-413e
 
 https://user-images.githubusercontent.com/105224348/173359823-a77e5f63-2cef-45bd-8ba8-08321422e9f1.mp4
 
+### Create, update & delete post
+* Create a post
+
+
 
