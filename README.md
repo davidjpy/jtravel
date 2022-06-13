@@ -25,6 +25,7 @@ This is a React.js + Django hybrid-app, with the same backend serves HTML pages 
 #### Register, login & logout your personal account
 * Registeration will fail if user enter an user ID that is already exist.
 * Login will fail if the user enter the incorrect email or password.
+* 
 https://user-images.githubusercontent.com/105224348/173371061-aa697dd1-2b5d-47e6-857d-92d038b665a5.mp4
 
 #### Edit your profile
