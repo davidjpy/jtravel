@@ -23,7 +23,8 @@ This is a React.js + Django hybrid-app, with the same backend serves HTML pages 
 
 ## Demonstrations
 #### Register, login & logout your personal account
-
+* Registeration will fail if user enter an user ID that is already exist.
+* Login will fail if the user enter the incorrect email or password.
 https://user-images.githubusercontent.com/105224348/173371061-aa697dd1-2b5d-47e6-857d-92d038b665a5.mp4
 
 #### Edit your profile
@@ -40,6 +41,6 @@ https://user-images.githubusercontent.com/105224348/173372432-b7a4d1bb-41ac-4549
 
 https://user-images.githubusercontent.com/105224348/173368240-160710b0-671b-4075-b9b7-3efc2118c78c.mp4
 
-### Other small features, such as unmute background video, toggle dark theme, links to external website.
+### Other small features, such as unmute background video, toggle dark theme, links to external website
 
 https://user-images.githubusercontent.com/105224348/173369183-c37709c8-0bd5-494d-b3c9-fd11166c4cb9.mp4
