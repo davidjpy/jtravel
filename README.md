@@ -29,3 +29,7 @@ https://user-images.githubusercontent.com/105224348/173351700-8bafb495-feda-4e8a
 * Login your account
 
 https://user-images.githubusercontent.com/105224348/173352349-7bd7604c-628d-4bcc-8b17-7682bc9db110.mp4
+
+* Logout your account
+
+https://user-images.githubusercontent.com/105224348/173352832-1f72897f-5841-413e-94c5-dcfac295a485.mp4
