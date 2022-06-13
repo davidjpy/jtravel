@@ -12,7 +12,7 @@ This is a React.js + Django hybrid-app, with the same backend serves HTML pages 
   6. axios
 * Backend
   1. Django
-  2. Simple JWT
+  2. Simple JWT Authentication
 
 ## Features
 * Register, login & logout your personal account.
