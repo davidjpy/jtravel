@@ -2,7 +2,7 @@
 J-Travel is a social media web application for people to share their travelling experience in Japan.
 
 ## Overview
-This is a hybrid-app model, with the same backend serves HTML pages embedding JavaScript components and API requests. ReactJS + Mui v5 were adopted for frontend development, while Django + JWT authentication were used for backend development. The main dependencies used are as follows:
+This is a hybrid-app model, with the same backend serves HTML pages embedding JavaScript components and API requests. ReactJS + Mui v5 were adopted for frontend development, while Django + JWT authentication were used for backend development. The main dependencies are listed as follows:
 * Frontend
   1. react
   2. react-router-dom
